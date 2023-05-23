@@ -1,0 +1,20 @@
+﻿<Window x:Class="ui.AdminWorkspacePages.AdminWorkspace"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ui.AdminWorkspacePages"
+        mc:Ignorable="d"
+        Title="AdminWorkspace" Height="450" Width="800" WindowState="Maximized">
+    <Grid>
+        <Label x:Name="nameLabel" Content="Добро пожаловать, !" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="70" Width="627" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="24"/>
+        <Label x:Name="roleLabel" Content="Должность" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="40" Width="209" FontSize="20" VerticalContentAlignment="Bottom"/>
+        <Button x:Name="exportButton" Content="Экспорт заказов" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" Width="372" FontSize="24" Margin="215,220,205,0" Click="exportButton_Click"/>
+        <Button x:Name="editorWorkerButton" Content="Сотрудники" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" Width="372" FontSize="24" Margin="215,85,205,0" Click="editorWorkerButton_Click"/>
+        <Button x:Name="exitButton" Content="Выход" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="40" Width="209" FontSize="24" IsCancel="True" Click="exitButton_Click"/>
+        <Button x:Name="dishesEditorButton" Content="Блюда" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" Width="372" FontSize="24" Margin="215,130,205,0" Click="dishesEditorButton_Click"/>
+        <Button x:Name="ingredientsEditorButton" Content="Ингредиенты" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" Width="372" FontSize="24" Margin="215,175,205,0" Click="ingredientsEditorButton_Click"/>
+        <Button x:Name="backupButton" Content="Резервная копия ингредиентов" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" Width="372" FontSize="24" Margin="215,265,205,0" IsCancel="True" Click="backupButton_Click"/>
+        <Button x:Name="loadBackupButton" Content="Загрузить копию" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" Width="372" FontSize="24" Margin="215,310,205,0" Click="loadBackupButton_Click" />
+    </Grid>
+</Window>
