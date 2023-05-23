@@ -35,7 +35,7 @@ namespace ui
             var worker = RequestClient.AuthWorker(username, password);
             if (worker is not null)
             {
-                if (RequestClient.CheckIsItAdmin(worker.PositionId))
+                if (RequestClient.CheckIsItAdmin(worker.Id))
                 {
                     new AdminWorkspace(this, worker).Show();
                 }

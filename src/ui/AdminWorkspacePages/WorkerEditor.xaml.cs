@@ -1,9 +1,9 @@
-﻿using RestaurantsClasses.WorkersSystem;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using TrainsClasses;
 using ui.Helper;
 
 namespace ui.AdminWorkspacePages
@@ -13,105 +13,27 @@ namespace ui.AdminWorkspacePages
     /// </summary>
     /// 
 
-    public class WorkerItem
+    public class UserItem
     {
         public int Id { get; set;}
-        public string FirstName { get; set;}
-        public string LastName { get; set; }
-        public string Phone { get; set; }
-        public string Username { get; set; }
+        public string Login { get; set;}
         public string Password { get; set; }
-        public string ButtonText { get; set; }
     }
 
     public partial class WorkerEditor : Window
     {
         private Window _previous;
-        private Worker _admin;
-        public WorkerEditor(Window previous, Worker admin)
+        private User _admin;
+        public WorkerEditor(Window previous, User admin)
         {
             InitializeComponent();
             _previous = previous;
             _admin = admin;
 
-            var workers = RequestClient.GetWorkers();
+            var users = RequestClient.GetUsers();
 
-            //var genNewPassword = new FrameworkElementFactory(typeof(Button));
-            //genNewPassword.SetBinding(Button.NameProperty, new Binding("Id"));
-            //genNewPassword.SetBinding(Button.ContentProperty, new Binding("ButtonText"));
-            //genNewPassword.AddHandler(Button.ClickEvent, new RoutedEventHandler((o, e) => getNewPassword(o, e)));
-
-            //workersGrid.Columns.Add(
-            //    new DataGridTextColumn()
-            //    {
-            //        Header = "Имя",
-            //        Binding = new Binding("FirstName"),
-            //        Width = 200
-            //    }
-            //);
-
-            //workersGrid.Columns.Add(
-            //    new DataGridTextColumn()
-            //    {
-            //        Header = "Фамилия",
-            //        Binding = new Binding("LastName"),
-            //        Width = 110
-            //    }
-            //);
-
-            //workersGrid.Columns.Add(
-            //    new DataGridTextColumn()
-            //    {
-            //        Header = "Имя пользователя",
-            //        Binding = new Binding("Username"),
-            //        Width = 110
-            //    }
-            //);
-
-
-
-
-            //foreach (var worker in workers)
-            //{
-            //    workersGrid.Items.Add(new WorkerItem()
-            //    {
-            //        Id = worker.id,
-            //        FirstName = worker.FirstName,
-            //        LastName = worker.LastName,
-            //        Username = worker.Username,
-            //        Password = worker.Password,
-            //        ButtonText = $"Сгенерировать новый пароль для {worker.id}"
-            //    });
-            //}
-
-            workersGrid.ItemsSource = workers;
-
-            //workersGrid.Columns.Add(
-            //    new DataGridTemplateColumn()
-            //    {
-            //        Header = "Сгенерировать пароль",
-            //        CellTemplate = new DataTemplate() { VisualTree = genNewPassword },
-            //        Width= 150
-            //    }
-            //);
+            workersGrid.ItemsSource = users;
         }
-
-        //private void getNewPassword(object sender, RoutedEventArgs e)
-        //{
-
-        //    var buttonContent = ((Button)sender).Content.ToString();
-
-        //    if (buttonContent == string.Empty)
-        //        return;
-
-        //    string rawWorkerId = buttonContent.Split(' ').Last();
-        //    if (!int.TryParse(rawWorkerId, out int workerId))
-        //        return;
-
-        //    string password = RequestClient.GenerateNewPassword(workerId, _admin.id);
-        //    newPasswordBox.Text = password;
-        //    newPasswordBox.IsEnabled = true;
-        //}
 
         private void exitButton_Click(object sender, RoutedEventArgs e)
         {
@@ -134,46 +56,44 @@ namespace ui.AdminWorkspacePages
 
                 var items = ((DataGrid)sender).Items;
 
-                var workerData = (Worker)items[selectedRowIndex];
+                var userData = (UserItem)items[selectedRowIndex];
 
-                if (workerData.Username == string.Empty)
+                if (string.IsNullOrEmpty(userData.Login))
                 {
                     MessageBox.Show("Перед сохранением введите логин пользователя");
                     return;
                 }
 
-                if (workerData.FirstName == string.Empty)
+                if (string.IsNullOrEmpty(userData.Password))
                 {
-                    MessageBox.Show("Перед сохранением введите имя пользователя");
+                    MessageBox.Show("Перед сохранением введите пароль");
                     return;
                 }
 
-                if (workerData.LastName == string.Empty)
-                {
-                    MessageBox.Show("Перед сохранением введите фамилию пользователя");
-                    return;
-                } 
+                //if (string.IsNullOrEmpty(workerData.Login))
+                //{
+                //    MessageBox.Show("Перед сохранением введите фамилию пользователя");
+                //    return;
+                //} 
 
-                var workers = RequestClient.GetWorkers();
+                var users = RequestClient.GetUsers();
 
-                var worker = workers.Where(x => x.Username == workerData.Username).FirstOrDefault();
+                var user = users.Where(x => x.Login == userData.Login).FirstOrDefault();
 
-                if (worker is null)
+                if (user is null)
                 {
                     //TODO создание
-                    RequestClient.CreateWorker(workerData.Username, workerData.FirstName, workerData.LastName, workerData.Phone);
+                    RequestClient.CreateWorker(userData.Login, userData.Password, _admin.Token);
 
                     MessageBox.Show("Пользователь был успешно создан");
 
-                    workerIdBox.Text = RequestClient.GetWorkers().Last().id.ToString();
+                    workerIdBox.Text = users.Last().Id.ToString();
                     changePasswordButton_Click(sender, null);
-                    //_previous.editorWorkerButton_Click(sender, null);
-                    //exitButton_Click(sender, null);
                 }
                 else
                 {
                     //TODO сохранение
-                    RequestClient.UpdateWorker(worker.id, workerData.Username, workerData.FirstName, workerData.LastName, workerData.Phone);
+                    RequestClient.UpdateWorker(userData.Id, userData.Login, userData.Password, _admin.Token);
 
                     MessageBox.Show("Данные пользователя успешно обновлены");
 
@@ -187,7 +107,6 @@ namespace ui.AdminWorkspacePages
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             workersGrid.Columns.RemoveAt(workersGrid.Columns.Count - 2);
-            //workersGrid.Columns.RemoveAt(workersGrid.Columns.Count - 1);
             workersGrid.Columns[workersGrid.Columns.Count-1].IsReadOnly = true;
         }
 
@@ -202,14 +121,14 @@ namespace ui.AdminWorkspacePages
             }
                 
 
-            var worker = RequestClient.GetWorkers().Where(x => x.id == workerId).FirstOrDefault();
-            if (worker is null)
+            var user = RequestClient.GetUsers().FirstOrDefault(x => x.Id == workerId);
+            if (user is null)
             {
                 MessageBox.Show("Такого сотрудника не существует");
                 return;
             }
 
-            string password = RequestClient.GenerateNewPassword(workerId, _admin.id);
+            string password = RequestClient.GenerateNewPassword(workerId, _admin.Id);
             newPasswordBox.Text = password;
             newPasswordBox.IsEnabled = true;
         }
@@ -226,20 +145,20 @@ namespace ui.AdminWorkspacePages
             }
 
 
-            var worker = RequestClient.GetWorkers().Where(x => x.id == workerId).FirstOrDefault();
-            if (worker is null)
+            var user = RequestClient.GetUsers().FirstOrDefault(x => x.Id == workerId);
+            if (user is null)
             {
                 MessageBox.Show("Такого сотрудника не существует");
                 return;
             }
 
-            if (worker.id == _admin.id)
+            if (user.Id == _admin.Id)
             {
                 MessageBox.Show("Себя нельзя удалить");
                 return;
             }
 
-            RequestClient.DeleteWorker(worker.id);
+            RequestClient.DeleteWorker(user.Id);
             MessageBox.Show("Сотрудник успешно удален");
             exitButton_Click(null, null);
         }
