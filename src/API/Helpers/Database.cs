@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using System.Data;
 using System.Net;
 using System.Text;
 using System.Xml.Linq;
@@ -9,6 +11,9 @@ namespace RestaurantsClasses
     // класс взаимодействия с базой данных
     public static class Database
     {
+        // строка подключения
+        //connectionString
+
         //функция получения объектов из базы, где Т - любой наследник класса Model
         public static List<T> GetObject<T>(string where = "", string name = "") where T : Model
         {
@@ -63,7 +68,7 @@ namespace RestaurantsClasses
             try
             {
                 // используя соединение, выполняем дальнейшие команды
-                using var connection = new NpgsqlConnection(_connectionString);
+                using var connection = new SqlConnection(connectionString);
 
                 // создаем SQL команду по тексту
                 NpgsqlCommand command = new(query, connection);
