@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <Reference Include="TrainsClasses">
-      <HintPath>..\TrainsClasses\bin\Debug\net6.0\TrainsClasses.dll</HintPath>
+      <HintPath>..\classes\bin\Debug\net6.0\TrainsClasses.dll</HintPath>
     </Reference>
   </ItemGroup>
 

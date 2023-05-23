@@ -12,7 +12,7 @@ namespace RestaurantsClasses
     public static class Database
     {
         // строка подключения
-        //connectionString
+        private static string _connectionString = "Server=localhost;Database=TrainsDiploma;";
 
         //функция получения объектов из базы, где Т - любой наследник класса Model
         public static List<T> GetObject<T>(string where = "", string name = "") where T : Model
@@ -68,13 +68,13 @@ namespace RestaurantsClasses
             try
             {
                 // используя соединение, выполняем дальнейшие команды
-                using var connection = new SqlConnection(connectionString);
+                using var connection = new SqlConnection(_connectionString);
 
                 // создаем SQL команду по тексту
-                NpgsqlCommand command = new(query, connection);
+                SqlCommand command = new(query, connection);
 
                 // Создаем считывающий элемент
-                NpgsqlDataAdapter adapter = new(command);
+                SqlDataAdapter adapter = new(command);
 
                 // заполняем таблицу
                 adapter.Fill(result);
@@ -149,41 +149,23 @@ namespace RestaurantsClasses
         //}
 
         // создать нового сотрудника
-        //public static void CreateWorker(string username, string firstName, string secondName, long phone)
-        //{
-        //    int id = GetObject<Worker>().Count() + 1;
+        public static void CreateUser(string login, string password, string role)
+        {
+            int id = GetObject<User>().Count() + 1;
 
-        //    //TODO брать должность из базы
-        //    ExecuteQuery($"INSERT INTO public.\"Worker\" VALUES ({id}, '{firstName}', '{secondName}', {phone}, 3, '{username}', '')");
-        //}
+            //TODO брать должность из базы
+            ExecuteQuery($"INSERT INTO public.\"Worker\" VALUES ({id}, '{login}', '{password}', {phone}, 3, '{username}', '')");
+        }
 
-        // обновить существующего сотрудника
-        //public static void UpdateWorker(int worker_id, string username, string firstName, string secondName, long phone)
-        //{
-        //    var worker = GetObject<Worker>().Where(x => x.id == worker_id).FirstOrDefault();
-        //    if (worker == null)
-        //        return;
+        //обновить существующего сотрудника
+        public static void UpdateUser(int id, string login, string password)
+        {
+            var worker = GetObject<User>().Where(x => x.Id == id).FirstOrDefault();
+            if (worker == null)
+                return;
 
-        //    //TODO брать должность из базы
-        //    ExecuteQuery($"UPDATE public.\"Worker\" WHERE id = {worker_id} SET first_name = '{firstName}', last_name = '{secondName}', phone = {phone}, username = '{username}'");
-        //}
-
-        // создать новый ингредиент
-        //public static void CreateOnlineOrder(int client_id, string address)
-        //{
-        //    int id = GetObject<OnlineOrder>().Count() + 1;
-
-        //    ExecuteQuery($"INSERT INTO public.\"OnlineOrder\" VALUES ({id}, '{DateTime.Now:yyyy-MM-dd)}', {client_id}, '{address}', False)");
-        //}
-
-        // обновить существующий ингредиент
-        //public static void UpdateOnlineOrder(int id, string address)
-        //{
-        //    var ingredient = GetObject<OnlineOrder>().Where(x => x.id == id).FirstOrDefault();
-        //    if (ingredient == null)
-        //        return;
-
-        //    ExecuteQuery($"UPDATE public.\"OnlineOrder\" SET address = '{address}' WHERE id = {id}");
-        //}
+            //TODO брать должность из базы
+            ExecuteQuery($"UPDATE public.\"Worker\" WHERE id = {id} SET login = '{login}', password = '{password}'");
+        }
     }
 }
