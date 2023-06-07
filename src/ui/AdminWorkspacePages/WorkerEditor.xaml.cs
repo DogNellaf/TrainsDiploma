@@ -128,7 +128,7 @@ namespace ui.AdminWorkspacePages
                 return;
             }
 
-            string password = RequestClient.GenerateNewPassword(workerId, _admin.Id);
+            string password = RequestClient.GenerateNewPassword(workerId, _admin.Token);
             newPasswordBox.Text = password;
             newPasswordBox.IsEnabled = true;
         }

@@ -26,17 +26,18 @@ namespace ui.Helper
 
         private static string SendRequest(string url, string method)
         {
-            var request = WebRequest.Create($"{_server}/{url}");
+            return "";
+            //var request = WebRequest.Create($"{_server}/{url}");
 
-            request.Method = method;
+            //request.Method = method;
 
-            var response = request.GetResponse();
+            //var response = request.GetResponse();
 
-            var dataStream = response.GetResponseStream();
+            //var dataStream = response.GetResponseStream();
 
-            var reader = new StreamReader(dataStream);
+            //var reader = new StreamReader(dataStream);
 
-            return reader.ReadToEnd();
+            //return reader.ReadToEnd();
         }
 
         // проверка авторизации пользователя 
