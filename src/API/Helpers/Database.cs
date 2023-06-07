@@ -12,7 +12,7 @@ namespace RestaurantsClasses
     public static class Database
     {
         // строка подключения
-        private static string _connectionString = "Server=localhost;Database=TrainsDiploma;";
+        private static string _connectionString = "Server=.\\SQLEXPRESS;Database=TrainsDiploma;Trusted_Connection=True;TrustServerCertificate=True";
 
         //функция получения объектов из базы, где Т - любой наследник класса Model
         public static List<T> GetObject<T>(string where = "", string name = "") where T : Model
@@ -21,13 +21,15 @@ namespace RestaurantsClasses
             List<T> objects = new();
 
             if (name == "")
+            {
                 name = typeof(T).Name;
+            }
 
             // проверяем, есть ли условие
-            string query = $"SELECT * FROM public.\"{name}\"";
+            string query = $"SELECT * FROM dbo.\"{name}\"";
             if (where != "")
             {
-                query = $"SELECT * FROM public.\"{name}\" where {where}";
+                query = $"SELECT * FROM dbo.\"{name}\" where {where}";
             }
 
             // кидаем запрос на выборку
@@ -148,24 +150,23 @@ namespace RestaurantsClasses
         //    return password;
         //}
 
-        // создать нового сотрудника
-        public static void CreateUser(string login, string password, string role)
+        //создать нового сотрудника
+        public static User CreateUser(string login, string token, float balance, string role)
         {
-            int id = GetObject<User>().Count() + 1;
-
             //TODO брать должность из базы
-            ExecuteQuery($"INSERT INTO public.\"Worker\" VALUES ({id}, '{login}', '{password}', {phone}, 3, '{username}', '')");
+            ExecuteQuery($"INSERT INTO dbo.\"User\" (login, token, balance, role) VALUES ('{login}', '{token}', {balance}, '{role}')");
+            return GetObject<User>().Last();
         }
 
         //обновить существующего сотрудника
-        public static void UpdateUser(int id, string login, string password)
-        {
-            var worker = GetObject<User>().Where(x => x.Id == id).FirstOrDefault();
-            if (worker == null)
-                return;
+        //public static void UpdateUser(int id, string login, string password)
+        //{
+        //    var worker = GetObject<User>().Where(x => x.Id == id).FirstOrDefault();
+        //    if (worker == null)
+        //        return;
 
-            //TODO брать должность из базы
-            ExecuteQuery($"UPDATE public.\"Worker\" WHERE id = {id} SET login = '{login}', password = '{password}'");
-        }
+        //    //TODO брать должность из базы
+        //    ExecuteQuery($"UPDATE public.\"Worker\" WHERE id = {id} SET login = '{login}', password = '{password}'");
+        //}
     }
 }

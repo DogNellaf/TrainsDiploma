@@ -1,3 +1,5 @@
+using API.Services;
+
 namespace API
 {
     public class Program
@@ -10,6 +12,7 @@ namespace API
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddTransient<UserService, UserService>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

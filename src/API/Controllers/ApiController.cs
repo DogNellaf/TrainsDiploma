@@ -1,14 +1,7 @@
+using API.Helpers;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using RestaurantsClasees.OrderSystem;
 using RestaurantsClasses;
-using RestaurantsClasses.KontragentsSystem;
-using RestaurantsClasses.OnlineSystem;
-using RestaurantsClasses.WorkersSystem;
-using RestaurantsClasses.Enums;
-using System.Numerics;
-using System.ComponentModel;
-using System.Xml.Linq;
+using TrainsClasses;
 
 namespace RestaurantsDataApi.Controllers
 {
@@ -23,22 +16,22 @@ namespace RestaurantsDataApi.Controllers
             _logger = logger;
         }
 
-        public IList<Meal> GetMeals()
-        {
-            return Database.GetObject<Meal>();
-        }
+        //public IList<Meal> GetMeals()
+        //{
+        //    return Database.GetObject<Meal>();
+        //}
 
 
-        public IEnumerable<Ingredient> GetIngredients()
-        {
-            return Database.GetObject<Ingredient>();
-        }
+        //public IEnumerable<Ingredient> GetIngredients()
+        //{
+        //    return Database.GetObject<Ingredient>();
+        //}
 
-        public string GetOfflineMeals(int order_id)
-        {
-            var rawMeals = Database.GetOfflineMeals(order_id);
-            return JsonConvert.SerializeObject(rawMeals);
-        }
+        //public string GetOfflineMeals(int order_id)
+        //{
+        //    var rawMeals = Database.GetOfflineMeals(order_id);
+        //    return JsonConvert.SerializeObject(rawMeals);
+        //}
 
         //public IEnumerable<Ingredient> GetIngredientsByMeal(int meal_id)
         //{
@@ -50,102 +43,90 @@ namespace RestaurantsDataApi.Controllers
         //    return meal.GetIngredients().Select(x => x.Key);
         //}
 
-        public Client Auth(string username, string password)
-        {
-            var client = Database.GetObject<Client>($"username = '{username}'").FirstOrDefault();
+        //public IActionResult Auth(string username, string password)
+        //{
+        //    var client = Database.GetObject<User>($"username = '{username}'").FirstOrDefault();
 
-            if (client is null)
-                return null;
+        //    if (client is null)
+        //        return new ActionResult() { };
 
-            if (Encoder.CheckHash(password, client.Password))
-                return client;
+        //    if (!Encoder.CheckHash(password, client.Token))
+        //        return null;
 
-            return null;
-        }
+        //    return client;
+        //}
 
-        public string AuthWorker(string username, string password)
-        {
-            var worker = Database.GetObject<Worker>($"username = '{username}'").FirstOrDefault();
+        
+        //public User AddUser(string username, string password)
+        //{
+        //    var client = Database.GetObject<User>($"username = {username}").FirstOrDefault();
 
-            if (worker is null)
-                return null;
+        //    if (client is not null)
+        //        return null;
 
-            if (Encoder.CheckHash(password, worker.Password))
-                return JsonConvert.SerializeObject(worker);
+        //    var hash = Encoder.Encode(password);
 
-            return null;
-        }
+        //    return Database.AddUser(username, hash);
+        //}
 
-        public Client AddUser(string username, string password)
-        {
-            var client = Database.GetObject<Client>($"username = {username}").FirstOrDefault();
+        //public List<User> Users => Database.GetObject<User>("", "User");
+        //public List<Ingredient> GetIngredientsByMeal(int id) => Database.GetIngredientsByMeal(id);
 
-            if (client is not null)
-                return null;
+        //public List<OnlineOrder> OnlineOrders(int client_id) => Database.GetObject<OnlineOrder>($"client_id = {client_id}");
 
-            var hash = Encoder.Encode(password);
+        //public List<OfflineOrder> NewOrders() => Database.GetObject<OfflineOrder>($"status_id = {1}", "Order");
 
-            return Database.AddUser(username, hash);
-        }
+        //public List<Worker> GetWorkers() => Database.GetObject<Worker>();
 
-        public List<OfflineOrder> OfflineOrders() => Database.GetObject<OfflineOrder>("", "Order");
-        public List<Ingredient> GetIngredientsByMeal(int id) => Database.GetIngredientsByMeal(id);
+        //public string GetPositionName(int id)
+        //{
+        //    var position = Database.GetObject<Position>($"id = {id}").FirstOrDefault();
+        //    if (position is null)
+        //        return string.Empty;
 
-        public List<OnlineOrder> OnlineOrders(int client_id) => Database.GetObject<OnlineOrder>($"client_id = {client_id}");
+        //    return position.Name;
+        //}
 
-        public List<OfflineOrder> NewOrders() => Database.GetObject<OfflineOrder>($"status_id = {1}", "Order");
+        //public bool IsItAdmin(int id)
+        //{
+        //    var position = Database.GetObject<Position>($"id = {id}").FirstOrDefault();
+        //    if (position is null)
+        //        return false;
 
-        public List<Worker> GetWorkers() => Database.GetObject<Worker>();
+        //    return position.Role == WorkerRole.Admin;
+        //}
 
-        public string GetPositionName(int id)
-        {
-            var position = Database.GetObject<Position>($"id = {id}").FirstOrDefault();
-            if (position is null)
-                return string.Empty;
+        //public void SetOrderToWorker(int order_id, int worker_id) => Database.SetOrderToWorker(order_id, worker_id);
 
-            return position.Name;
-        }
+        //public void SetOrderComplete(int order_id) => Database.SetOrderComplete(order_id);
 
-        public bool IsItAdmin(int id)
-        {
-            var position = Database.GetObject<Position>($"id = {id}").FirstOrDefault();
-            if (position is null)
-                return false;
+        //public void DeliverOfflineMeal(int order_id, int meal_id) => Database.DeliverOfflineMeal(order_id, meal_id);
 
-            return position.Role == WorkerRole.Admin;
-        }
+        //public string GenerateNewPassword(int worker_id, int admin_id) => Database.GenerateNewPassword(worker_id, admin_id);
 
-        public void SetOrderToWorker(int order_id, int worker_id) => Database.SetOrderToWorker(order_id, worker_id);
+        //public void CreateWorker(string username, string firstName, string secondName, long phone) => Database.CreateUser(username, firstName, secondName, phone);
 
-        public void SetOrderComplete(int order_id) => Database.SetOrderComplete(order_id);
+        //public void UpdateWorker(int worker_id, string username, string firstName, string secondName, long phone) => Database.UpdateUser(worker_id, username, firstName, secondName, phone);
 
-        public void DeliverOfflineMeal(int order_id, int meal_id) => Database.DeliverOfflineMeal(order_id, meal_id);
+        //public void CreateMeal(string name, float cost, float weight, int servnumber) => Database.CreateMeal(name, cost, weight, servnumber);
 
-        public string GenerateNewPassword(int worker_id, int admin_id) => Database.GenerateNewPassword(worker_id, admin_id);
+        //public void UpdateMeal(int meal_id, string name, float cost, float weight, int servnumber) => Database.UpdateMeal(meal_id, name, cost, weight, servnumber);
 
-        public void CreateWorker(string username, string firstName, string secondName, long phone) => Database.CreateUser(username, firstName, secondName, phone);
+        //public void CreateIngredient(string name) => Database.CreateIngredient(name);
 
-        public void UpdateWorker(int worker_id, string username, string firstName, string secondName, long phone) => Database.UpdateUser(worker_id, username, firstName, secondName, phone);
+        //public void UpdateIngredient(int id, string name) => Database.UpdateIngredient(id, name);
 
-        public void CreateMeal(string name, float cost, float weight, int servnumber) => Database.CreateMeal(name, cost, weight, servnumber);
+        //public void Delete(string name, int id) => Database.Delete(name, id);
 
-        public void UpdateMeal(int meal_id, string name, float cost, float weight, int servnumber) => Database.UpdateMeal(meal_id, name, cost, weight, servnumber);
+        //public void AddIngredientsToMeal(int meal_id, int ingredient_id) => Database.AddIngredientsToMeal(meal_id, ingredient_id);
 
-        public void CreateIngredient(string name) => Database.CreateIngredient(name);
+        //public void DeleteIngredientByMeal(int meal_id, int id) => Database.DeleteIngredientByMeal(meal_id, id);
 
-        public void UpdateIngredient(int id, string name) => Database.UpdateIngredient(id, name);
+        //public List<OnlineOrder> GetOnlineOrders() => Database.GetObject<OnlineOrder>($"is_complited = false");
 
-        public void Delete(string name, int id) => Database.Delete(name, id);
+        //public void CreateOnlineOrder(int client_id, string address) => Database.CreateOnlineOrder(client_id, address);
 
-        public void AddIngredientsToMeal(int meal_id, int ingredient_id) => Database.AddIngredientsToMeal(meal_id, ingredient_id);
-
-        public void DeleteIngredientByMeal(int meal_id, int id) => Database.DeleteIngredientByMeal(meal_id, id);
-
-        public List<OnlineOrder> GetOnlineOrders() => Database.GetObject<OnlineOrder>($"is_complited = false");
-
-        public void CreateOnlineOrder(int client_id, string address) => Database.CreateOnlineOrder(client_id, address);
-
-        public void SetOnlineOrderComplete(int order_id) => Database.SetOnlineOrderComplete(order_id);
+        //public void SetOnlineOrderComplete(int order_id) => Database.SetOnlineOrderComplete(order_id);
 
         //public void UpdateOnlineOrder(int id, string address) => Database.UpdateOnlineOrder(id, address);
     }
