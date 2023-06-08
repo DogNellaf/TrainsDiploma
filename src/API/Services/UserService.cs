@@ -1,24 +1,29 @@
 ﻿using API.Helpers;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using RestaurantsClasses;
 using TrainsClasses;
 
 namespace API.Services
 {
     // сервис взаимодействия с низкоуровневыми классами для пользователей
-    public class UserService
+    public class UserService: Service<User>
     {
-        // список всех пользователей
-        public List<User> Users => Database.GetObject<User>();
+        private readonly RoleService _roleService;
 
-        // получить пользователя по id
-        public User? GetUser(int id) => Database.GetObject<User>($"id = {id}", "User").FirstOrDefault();
+        public UserService(RoleService roleService)
+        {
+            _roleService = roleService;
+        }
+        // добавление пользователя
+        public override User Add(User user)
+        {
+            user.Token = Encoder.Encode(user.Token);
+            return base.Add(user);
+        }
 
         // проверить корректность введенного пароля
         public bool CheckPassword(int id, string password)
         {
-            var client = Database.GetObject<User>($"id = '{id}'").FirstOrDefault();
+            var client = Database.GetObject<User>($"id = '{id}'");
 
             if (client is null)
                 return false;
@@ -27,15 +32,51 @@ namespace API.Services
         }
 
         // валидация данных нового пользователя
-        public bool Validate(User user)
+        public override bool Validate(User user)
         {
             return true;
         }
 
-        // добавление пользователя
-        public User Add(User user)
+        // проверить является ли пользователь админом по токену
+        public bool CheckAdminByToken(string token)
         {
-            return Database.CreateUser(user.Login, user.Token, user.Balance, user.Role);
+            var user = Database.GetObject<User>($"token = {token}");
+
+            if (user is null)
+            {
+                return false;
+            }
+
+            return Database.CheckAdmin(user.Id);
+        }
+
+        // проверить является ли пользователь админом по id
+        public bool CheckAdminById(int id)
+        {
+            return Database.CheckAdmin(id);
+        }
+
+        // проверить является ли пользователь админом по id
+        public bool CheckWorkerById(int id)
+        {
+            return Database.CheckWorker(id);
+        }
+
+        // найти пользователя по логину и паролю
+        public User? GetByLoginAndPassword(string login, string password)
+        {
+            var token = Encoder.Encode(password);
+            return Database.GetObject<User>($"login = '{login}' and token like '{token}'");
+        }
+
+        public override string GetUpdateValues(User user)
+        {
+            return $"login = '{user.Login}', token = '{user.Token}', balance = {user.Balance}, roleId = {user.RoleId}";
+        }
+
+        public override string GetCreateValues(User user)
+        {
+            return $"(login, token, balance, roleId) VALUES ('{user.Login}', '{user.Token}', {user.Balance}, {user.RoleId})";
         }
     }
 }

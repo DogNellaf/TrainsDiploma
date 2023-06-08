@@ -1,9 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
 using System.Data;
-using System.Net;
-using System.Text;
-using System.Xml.Linq;
 using TrainsClasses;
 
 namespace RestaurantsClasses
@@ -15,15 +11,12 @@ namespace RestaurantsClasses
         private static string _connectionString = "Server=.\\SQLEXPRESS;Database=TrainsDiploma;Trusted_Connection=True;TrustServerCertificate=True";
 
         //функция получения объектов из базы, где Т - любой наследник класса Model
-        public static List<T> GetObject<T>(string where = "", string name = "") where T : Model
+        public static List<T> GetObjects<T>(string where = "") where T : Model
         {
             // создаем пустой список объектов
             List<T> objects = new();
 
-            if (name == "")
-            {
-                name = typeof(T).Name;
-            }
+            var name = typeof(T).Name;
 
             // проверяем, есть ли условие
             string query = $"SELECT * FROM dbo.\"{name}\"";
@@ -53,11 +46,53 @@ namespace RestaurantsClasses
             return objects;
         }
 
-        // общая функция удаления объектов
-        public static void Delete(string name, int id)
+        //функция получения объектов из базы, где Т - любой наследник класса Model
+        public static T? GetObject<T>(string where = "") where T : Model
         {
-            name = name[0].ToString().ToUpper() + name.TrimStart(name[0]);
-            ExecuteQuery($"DELETE FROM public.\"{name}\" WHERE id = {id}");
+            var name = typeof(T).Name;
+
+            // проверяем, есть ли условие
+            string query = $"SELECT * FROM dbo.\"{name}\"";
+            if (where != "")
+            {
+                query = $"SELECT * FROM dbo.\"{name}\" where {where}";
+            }
+
+            // кидаем запрос на выборку
+            DataTable table = ExecuteQuery(query);
+
+            // проходимся по каждой строчке таблицы-результата
+            foreach (DataRow row in table.Rows)
+            {
+                // в конструктор передаем единственный параметр - все столбцы строки
+                var parameters = new object[1];
+                parameters[0] = row.ItemArray;
+
+                // создаем новый объект класса Т
+                return Activator.CreateInstance(typeof(T), parameters) as T;
+            }
+
+            return null;
+        }
+
+        // общая функция удаления объектов
+        public static void Delete<T>(int id)
+        {
+            //name = name[0].ToString().ToUpper() + name.TrimStart(name[0]);
+            ExecuteQuery($"DELETE FROM dbo.\"{typeof(T).Name}\" WHERE id = {id}");
+        }
+
+        // общая функция обновления объектов
+        public static void Update<T>(int id, string values)
+        {
+            ExecuteQuery($"UPDATE dbo.\"{typeof(T).Name}\" SET {values} WHERE id = {id}");
+        }
+
+        // общая функция создания объектов
+        public static T Create<T>(string values) where T: Model
+        {
+            ExecuteQuery($"INSERT INTO dbo.\"{typeof(T).Name}\" {values}");
+            return GetObjects<T>().Last();
         }
 
         // функция отправки запроса в базу данных
@@ -93,80 +128,42 @@ namespace RestaurantsClasses
             return result;
         }
 
-
-
-
-        // функция добавления ингридента в блюдо
-        public static void AddIngredientsToMeal(int meal_id, int ingredient_id) => ExecuteQuery($"INSERT INTO public.\"Ingredient_to_Meal\" VALUES ({ingredient_id}, {meal_id}, 1)");
-
-
-
-        // функция получения блюд по офлайн заказу
-        //public static Dictionary<Meal, int> GetOfflineMeals(int order_id)
-        //{
-        //    var rawData = ExecuteQuery($"SELECT * FROM \"Meal_to_Order\" WHERE online_order_id = {order_id}");
-        //    var result = new Dictionary<Meal, int>();
-
-        //    // проходимся по каждой строчке таблицы-результата
-        //    foreach (DataRow row in rawData.Rows)
-        //    {
-        //        // в конструктор передаем единственный параметр - все столбцы строки
-        //        var parameters = row.ItemArray;
-
-        //        int id = (int)parameters[0];
-        //        var count = (int)parameters[2];
-
-        //        // создаем новый объект класса Т
-        //        var meal = GetObject<Meal>($"id = {id}").FirstOrDefault();
-
-        //        // добавляем в список
-        //        result.Add(meal, count);
-        //    }
-        //    return result;
-        //}
-
-        // функция генерации сотруднику нового пароля
-        //public static string GenerateNewPassword(int worker_id, int admin_id)
-        //{
-        //    var admin = GetObject<Worker>($"id = {admin_id}").FirstOrDefault();
-
-        //    if (admin is null)
-        //        return "";
-
-        //    var position = GetObject<Position>($"id = {admin.PositionId}").FirstOrDefault();
-
-        //    if (position is null)
-        //        return "";
-
-        //    if (position.Role != WorkerRole.Admin)
-        //        return "";
-
-        //    string password = Generator.GenerateNewPassword();
-
-        //    string hash = Encoder.Encode(password);
-
-        //    ExecuteQuery($"UPDATE public.\"Worker\" SET password = '{hash}' WHERE id = {worker_id}");
-
-        //    return password;
-        //}
-
-        //создать нового сотрудника
-        public static User CreateUser(string login, string token, float balance, string role)
+        // проверить, является ли пользователь админом, по id
+        public static bool CheckAdmin(int id)
         {
-            //TODO брать должность из базы
-            ExecuteQuery($"INSERT INTO dbo.\"User\" (login, token, balance, role) VALUES ('{login}', '{token}', {balance}, '{role}')");
-            return GetObject<User>().Last();
+            DataTable table = ExecuteQuery($"SELECT IsAdmin\r\nFROM \"User\" as u\r\njoin Role as r on u.RoleId = r.Id \r\nWHERE u.id = {id}");
+
+            // проходимся по каждой строчке таблицы-результата
+            foreach (DataRow row in table.Rows)
+            {
+                // в конструктор передаем единственный параметр - все столбцы строки
+                var parameters = new object[1];
+                parameters[0] = row.ItemArray;
+
+                // создаем новый объект класса Т
+                return (bool)row.ItemArray[0];
+            }
+
+            return false;
         }
 
-        //обновить существующего сотрудника
-        //public static void UpdateUser(int id, string login, string password)
-        //{
-        //    var worker = GetObject<User>().Where(x => x.Id == id).FirstOrDefault();
-        //    if (worker == null)
-        //        return;
+        // проверить, является ли пользователь админом, по id
+        public static bool CheckWorker(int id)
+        {
+            DataTable table = ExecuteQuery($"SELECT IsWorker\r\nFROM \"User\" as u\r\njoin Role as r on u.RoleId = r.Id \r\nWHERE u.id = {id}");
 
-        //    //TODO брать должность из базы
-        //    ExecuteQuery($"UPDATE public.\"Worker\" WHERE id = {id} SET login = '{login}', password = '{password}'");
-        //}
+            // проходимся по каждой строчке таблицы-результата
+            foreach (DataRow row in table.Rows)
+            {
+                // в конструктор передаем единственный параметр - все столбцы строки
+                var parameters = new object[1];
+                parameters[0] = row.ItemArray;
+
+                // создаем новый объект класса Т
+                return (bool)row.ItemArray[0];
+            }
+
+            return false;
+        }
     }
 }

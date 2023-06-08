@@ -1,5 +1,6 @@
 ﻿using API.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 using TrainsClasses;
 
 namespace API.Controllers
@@ -18,7 +19,7 @@ namespace API.Controllers
         [HttpGet]
         public List<User> Users()
         {
-            return _userService.Users;
+            return _userService.Objects;
         }
 
         // GET: user/5
@@ -30,7 +31,7 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-            var user = _userService.GetUser(id);
+            var user = _userService.Get(id);
 
             if (user is null)
             {
@@ -42,7 +43,7 @@ namespace API.Controllers
 
         // POST: user
         [HttpPost("")]
-        public ActionResult Create(User user)
+        public ActionResult Create([FromBody] User user)
         {
             if (!_userService.Validate(user))
             {
@@ -53,17 +54,60 @@ namespace API.Controllers
         }
 
         // PUT: user/5
-        [HttpPut("{id:int}")]
-        public ActionResult Edit(int id)
+        [HttpPut("")]
+        public ActionResult Edit([FromBody] User user, string token)
         {
-            return Ok("Test Edit");
+            //if (!_userService.CheckToken(token))
+            //{
+            //    return Unauthorized();
+            //}
+
+            if (user.Id < 0)
+            {
+                return BadRequest();
+            }
+
+            var foundUser = _userService.Get(user.Id);
+
+            if (foundUser is null)
+            {
+                return NotFound();
+            }
+
+            _userService.Update(user);
+
+            return Ok(user);
         }
 
         // DELETE: user/5
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
-            return Ok("Test Delete");
+            _userService.Delete(id);
+            return Ok();
+        }
+
+        [HttpGet("auth")]
+        public ActionResult Auth(string login, string password)
+        {
+            var user = _userService.GetByLoginAndPassword(login, password);
+            if (user is null)
+            {
+                return NotFound("Пользователь не найден");
+            }
+            return Ok(user);
+        }
+
+        [HttpGet("isworker")]
+        public bool CheckIsWorker(int id)
+        {
+            return _userService.CheckWorkerById(id);
+        }
+
+        [HttpGet("isadmin")]
+        public bool CheckIsAdmin(int id)
+        {
+            return _userService.CheckAdminById(id);
         }
     }
 }
