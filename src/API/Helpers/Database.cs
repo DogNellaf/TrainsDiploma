@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using API.Helpers;
+using Microsoft.Data.SqlClient;
 using System.Data;
 using TrainsClasses;
 
@@ -164,6 +165,13 @@ namespace RestaurantsClasses
             }
 
             return false;
+        }
+
+        // установить новый пароль для пользователя
+        public static void ChangePassword(int id, string password)
+        {
+            var token = Encoder.Encode(password);
+            ExecuteQuery($"UPDATE dbo.\"User\" SET token = '{token}' WHERE id = {id}");
         }
     }
 }

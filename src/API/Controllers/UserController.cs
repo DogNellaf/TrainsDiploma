@@ -109,5 +109,25 @@ namespace API.Controllers
         {
             return _userService.CheckAdminById(id);
         }
+
+
+        [HttpPut("{id:int}/password")]
+        public IActionResult ChangePassword(int id, string password, string token)
+        {
+            if (!_userService.CheckAdminByToken(token))
+            {
+                return Unauthorized("У вас нет прав");
+            }
+
+            var user = _userService.Get(id);
+            if (user is null)
+            {
+                return NotFound("Пользователь не найден");
+            }
+
+            _userService.ChangePassword(id, password);
+
+            return Ok();
+        }
     }
 }

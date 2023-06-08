@@ -7,6 +7,9 @@ namespace API.Helpers
     {
         public static string Encode(string raw)
         {
+            if (raw is null)
+                raw = DateTime.Now.ToFileTimeUtc().ToString();
+
             var Sb = new StringBuilder();
 
             using (var hash = SHA256.Create())

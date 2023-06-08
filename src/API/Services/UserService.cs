@@ -40,7 +40,7 @@ namespace API.Services
         // проверить является ли пользователь админом по токену
         public bool CheckAdminByToken(string token)
         {
-            var user = Database.GetObject<User>($"token = {token}");
+            var user = Database.GetObject<User>($"token like '{token}'");
 
             if (user is null)
             {
@@ -67,6 +67,12 @@ namespace API.Services
         {
             var token = Encoder.Encode(password);
             return Database.GetObject<User>($"login = '{login}' and token like '{token}'");
+        }
+
+        // обновить пароль пользователя
+        public void ChangePassword(int id, string password)
+        {
+            Database.ChangePassword(id, password);
         }
 
         public override string GetUpdateValues(User user)
