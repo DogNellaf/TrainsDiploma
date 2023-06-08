@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -8,17 +9,6 @@ using ui.Helper;
 
 namespace ui.AdminWorkspacePages
 {
-    /// <summary>
-    /// Логика взаимодействия для WorkerEditor.xaml
-    /// </summary>
-    /// 
-
-    public class UserItem
-    {
-        public int Id { get; set;}
-        public string Login { get; set;}
-        public string Password { get; set; }
-    }
 
     public partial class WorkerEditor : Window
     {
@@ -30,7 +20,7 @@ namespace ui.AdminWorkspacePages
             _previous = previous;
             _admin = admin;
 
-            var users = RequestClient.GetUsers();
+            var users = RequestClient.GetObjects<User>();
 
             workersGrid.ItemsSource = users;
         }
@@ -56,7 +46,7 @@ namespace ui.AdminWorkspacePages
 
                 var items = ((DataGrid)sender).Items;
 
-                var userData = (UserItem)items[selectedRowIndex];
+                var userData = (User)items[selectedRowIndex];
 
                 if (string.IsNullOrEmpty(userData.Login))
                 {
@@ -64,50 +54,47 @@ namespace ui.AdminWorkspacePages
                     return;
                 }
 
-                if (string.IsNullOrEmpty(userData.Password))
+                if (string.IsNullOrEmpty(userData.RoleId.ToString()) || userData.RoleId <= 0)
                 {
-                    MessageBox.Show("Перед сохранением введите пароль");
+                    MessageBox.Show("Перед сохранением введите правильный id роли");
                     return;
                 }
 
-                //if (string.IsNullOrEmpty(workerData.Login))
-                //{
-                //    MessageBox.Show("Перед сохранением введите фамилию пользователя");
-                //    return;
-                //} 
+                var role = RequestClient.GetObject<Role>(userData.RoleId);
 
-                var users = RequestClient.GetUsers();
+                if (role is null)
+                {
+                    MessageBox.Show("Перед сохранением введите правильный id роли");
+                    return;
+                }
 
-                var user = users.Where(x => x.Login == userData.Login).FirstOrDefault();
+                var users = RequestClient.GetObjects<User>();
+
+                var user = users.Where(x => x.Id == userData.Id).FirstOrDefault();
 
                 if (user is null)
                 {
-                    //TODO создание
-                    RequestClient.CreateWorker(userData.Login, userData.Password, _admin.Token);
+
+                    RequestClient.CreateUser(userData.Login, userData.Token, userData.Balance, userData.RoleId);
 
                     MessageBox.Show("Пользователь был успешно создан");
-
-                    workerIdBox.Text = users.Last().Id.ToString();
-                    changePasswordButton_Click(sender, null);
                 }
                 else
                 {
-                    //TODO сохранение
-                    RequestClient.UpdateWorker(userData.Id, userData.Login, userData.Password, _admin.Token);
+                    RequestClient.UpdateUser(userData.Id, userData.Login, userData.Token, userData.Balance, userData.RoleId);
 
                     MessageBox.Show("Данные пользователя успешно обновлены");
-
-                    exitButton_Click(sender, null);
                 }
 
+
                 isManualEditCommit = false;
+                exitButton_Click(sender, null);
             }
         }
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            workersGrid.Columns.RemoveAt(workersGrid.Columns.Count - 2);
-            workersGrid.Columns[workersGrid.Columns.Count-1].IsReadOnly = true;
+            workersGrid.Columns[workersGrid.Columns.Count - 1].IsReadOnly = true;
+            workersGrid.Columns[1].IsReadOnly = true;
         }
 
         private void changePasswordButton_Click(object sender, RoutedEventArgs e)
@@ -119,18 +106,10 @@ namespace ui.AdminWorkspacePages
                 MessageBox.Show("Введите корректное число");
                 return;
             }
-                
 
-            var user = RequestClient.GetUsers().FirstOrDefault(x => x.Id == workerId);
-            if (user is null)
-            {
-                MessageBox.Show("Такого сотрудника не существует");
-                return;
-            }
-
-            string password = RequestClient.GenerateNewPassword(workerId, _admin.Token);
-            newPasswordBox.Text = password;
-            newPasswordBox.IsEnabled = true;
+            RequestClient.GenerateNewPassword(workerId, newPasswordBox.Text, _admin.Token);
+            MessageBox.Show("Пароль успешно изменен");
+            exitButton_Click(null, null);
         }
 
         // удплить сотрудника по id
@@ -145,10 +124,10 @@ namespace ui.AdminWorkspacePages
             }
 
 
-            var user = RequestClient.GetUsers().FirstOrDefault(x => x.Id == workerId);
+            var user = RequestClient.GetObjects<User>().FirstOrDefault(x => x.Id == workerId);
             if (user is null)
             {
-                MessageBox.Show("Такого сотрудника не существует");
+                MessageBox.Show("Такой сотрудник не существует");
                 return;
             }
 
@@ -158,7 +137,7 @@ namespace ui.AdminWorkspacePages
                 return;
             }
 
-            RequestClient.DeleteWorker(user.Id);
+            RequestClient.Delete<User>(user.Id);
             MessageBox.Show("Сотрудник успешно удален");
             exitButton_Click(null, null);
         }

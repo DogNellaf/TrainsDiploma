@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using TrainsClasses;
+using ui.Helper;
 
 namespace ui.AdminWorkspacePages
 {
@@ -16,7 +17,8 @@ namespace ui.AdminWorkspacePages
             _previous = previous;
             _user = user;
 
-            nameLabel.Content = $"Добро пожаловать, {user.Login}!";
+            nameLabel.Content = $"Добро пожаловать, {user.Login.Trim(' ')}!";
+            roleLabel.Content = RequestClient.GetRole(user.RoleId).Name;
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
@@ -29,6 +31,12 @@ namespace ui.AdminWorkspacePages
         {
             Hide();
             new WorkerEditor(this, _user).Show();
+        }
+
+        private void routesButton_Click(object sender, RoutedEventArgs e)
+        {
+            Hide();
+            new RouteEditor(this, _user).Show();
         }
     }
 }
