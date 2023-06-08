@@ -1,13 +1,19 @@
-﻿using System.Xml.Linq;
+﻿using System.Runtime.Serialization;
+using System.Xml.Linq;
 
 namespace TrainsClasses
 {
+    [DataContract]
     public class User:Model
     {
-        public string Login { get; }
-        public string Token { get; }
-        public float Balance { get; }
-        public string Role { get;}
+        [DataMember]
+        public string Login { get; set; }
+        [DataMember]
+        public string Token { get; set; }
+        [DataMember]
+        public float Balance { get; set; }
+        [DataMember]
+        public int RoleId { get; set; }
 
         public User(): base(0)
         {
@@ -18,16 +24,20 @@ namespace TrainsClasses
         {
             Login = (string)items[1];
             Token = (string)items[2];
-            Role = (string)items[4];
-            Balance = (int)items[3];
+            //if (items[4] != DBNull.Value)
+            //{
+            //    Role = (string)items[4];
+            //}
+            Balance = Convert.ToSingle(items[3]);
+            RoleId = (int)items[4];
         }
 
-        public User(int id, string login, string token, float balance, string role) : base(id)
+        public User(int id, string login, string token, float balance, int roleId) : base(id)
         {
             Login = login;
             Token = token;
             Balance = balance;
-            Role = role;
+            RoleId = roleId;
         }
     }
 }

@@ -1,8 +1,12 @@
-﻿namespace TrainsClasses
+﻿using System.Runtime.Serialization;
+
+namespace TrainsClasses
 {
+    [DataContract]
     public class Model
     {
-        public int Id { get; }
+        [DataMember]
+        public int Id { get; set; }
         public Model(int id)
         {
             Id = id;

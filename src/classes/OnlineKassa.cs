@@ -4,6 +4,7 @@
     {
         public string Name { get; }
         public PaymentType PaymentType { get; }
+
         public OnlineKassa(int id, string name, PaymentType paymentType): base(id)
         {
             Name = name;
