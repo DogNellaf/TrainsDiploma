@@ -18,6 +18,7 @@
         <Label Content="Id направления" HorizontalAlignment="Left" Margin="9,0,0,10" VerticalAlignment="Bottom"/>
         <TextBox x:Name="routeIdBox" HorizontalAlignment="Left" Margin="110,0,0,10" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="200" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
         <Button x:Name="removeButton" Content="Удалить" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="26" Width="150" IsCancel="True" Margin="315,0,0,10" Click="removeButton_Click"/>
+        <Label Content="Внимание! В столбце даты формат записи месяца и дня обратный. Сначала идет месяц, потом день." HorizontalAlignment="Left" Margin="9,0,0,41" VerticalAlignment="Bottom"/>
 
     </Grid>
 </Window>
