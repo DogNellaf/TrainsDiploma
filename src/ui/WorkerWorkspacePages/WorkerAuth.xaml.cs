@@ -32,16 +32,21 @@ namespace ui
         {
             var username = usernameTextBox.Text;
             var password = passwordTextBox.Text;
-            var worker = RequestClient.AuthWorker(username, password);
+            var worker = RequestClient.Auth(username, password);
             if (worker is not null)
             {
-                if (RequestClient.CheckIsItAdmin(worker.Id))
+                if (RequestClient.CheckAdmin(worker.Id))
                 {
                     new AdminWorkspace(this, worker).Show();
                 }
-                else
+                else if (RequestClient.CheckWorker(worker.Id))
                 {
                     new WorkerWorkspace(this, worker).Show();
+                }
+                else
+                {
+                    MessageBox.Show("Пользователь не является сотрудником");
+                    return;
                 }
                 Hide();
             }
