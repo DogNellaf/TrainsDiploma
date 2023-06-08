@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Text;
 using TrainsClasses;
 
 namespace ui.Helper
@@ -24,11 +26,23 @@ namespace ui.Helper
             return JsonConvert.DeserializeObject<List<T>>(raw);
         }
 
-        private static string SendRequest(string url, string method)
+        private static string SendRequest(string url, string method, string body = "")
         {
             var request = WebRequest.Create($"{_server}{url}");
 
             request.Method = method;
+
+            if (!string.IsNullOrEmpty(body))
+            {
+                var data = Encoding.Default.GetBytes(body);
+
+                request.ContentType = "application/json";
+                request.ContentLength = data.Length;
+
+                var newStream = request.GetRequestStream(); // get a ref to the request body so it can be modified
+                newStream.Write(data, 0, data.Length);
+                newStream.Close();
+            }
 
             var response = request.GetResponse();
 
@@ -58,7 +72,9 @@ namespace ui.Helper
         // регистрация
         public static User Register(string username, string password)
         {
-            var result = SendRequest($"user/add?username={username}&password={password}", "POST");
+            var user = new User(0, username, password, 0, 1);
+            var json = JsonConvert.SerializeObject(user);
+            var result = SendRequest($"user", "POST", json);
 
             return JsonConvert.DeserializeObject<User>(result);
         }
