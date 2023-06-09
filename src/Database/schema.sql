@@ -1,21 +1,19 @@
 USE [master]
 GO
-CREATE DATABASE [TrainsDiploma];
+CREATE DATABASE [TrainsDiploma]
 GO
 USE [TrainsDiploma]
 GO
-GO
-CREATE TABLE [dbo].[OnlineKassa](
+CREATE TABLE [dbo].[City](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [nchar](100) NOT NULL,
-	[PaymentTypeId] [int] NOT NULL,
- CONSTRAINT [PK_OnlineKassa] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_City] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[PaymentType]    Script Date: 08.06.2023 14:17:24 ******/
+/****** Object:  Table [dbo].[PaymentType]    Script Date: 09.06.2023 20:08:34 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29,7 +27,7 @@ CREATE TABLE [dbo].[PaymentType](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Role]    Script Date: 08.06.2023 14:17:24 ******/
+/****** Object:  Table [dbo].[Role]    Script Date: 09.06.2023 20:08:34 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -45,7 +43,7 @@ CREATE TABLE [dbo].[Role](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Route]    Script Date: 08.06.2023 14:17:24 ******/
+/****** Object:  Table [dbo].[Route]    Script Date: 09.06.2023 20:08:34 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -53,16 +51,31 @@ GO
 CREATE TABLE [dbo].[Route](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[DepartureTime] [datetime] NOT NULL,
-	[DepartureCity] [nchar](100) NOT NULL,
-	[DurationInMinutes] [int] NOT NULL,
-	[ArrivalCity] [nchar](100) NOT NULL,
+	[DepartureCityId] [int] NOT NULL,
+	[Duration] [int] NOT NULL,
+	[ArrivalCityId] [int] NOT NULL,
+	[Price] [float] NOT NULL,
  CONSTRAINT [PK_Route] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Ticket]    Script Date: 08.06.2023 14:17:24 ******/
+/****** Object:  Table [dbo].[Status]    Script Date: 09.06.2023 20:08:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Status](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nchar](50) NOT NULL,
+ CONSTRAINT [PK_Status] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Ticket]    Script Date: 09.06.2023 20:08:34 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -72,13 +85,14 @@ CREATE TABLE [dbo].[Ticket](
 	[BuyTime] [datetime] NOT NULL,
 	[Price] [int] NOT NULL,
 	[RouteId] [int] NOT NULL,
+	[StatusId] [int] NOT NULL,
  CONSTRAINT [PK_Ticket] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Transaction]    Script Date: 08.06.2023 14:17:24 ******/
+/****** Object:  Table [dbo].[Transaction]    Script Date: 09.06.2023 20:08:34 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -88,7 +102,8 @@ CREATE TABLE [dbo].[Transaction](
 	[UserId] [int] NOT NULL,
 	[Value] [float] NOT NULL,
 	[IsComplited] [bit] NOT NULL,
-	[PaymentType] [datetime] NOT NULL,
+	[PaymentTime] [datetime] NOT NULL,
+	[PaymentTypeId] [int] NOT NULL,
 	[KassaId] [int] NOT NULL,
  CONSTRAINT [PK_Transaction] PRIMARY KEY CLUSTERED 
 (
@@ -96,7 +111,7 @@ CREATE TABLE [dbo].[Transaction](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[User]    Script Date: 08.06.2023 14:17:24 ******/
+/****** Object:  Table [dbo].[User]    Script Date: 09.06.2023 20:08:34 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -107,13 +122,15 @@ CREATE TABLE [dbo].[User](
 	[Token] [ntext] NULL,
 	[Balance] [float] NOT NULL,
 	[RoleId] [int] NOT NULL,
+	[PassportSeries] [nchar](4) NOT NULL,
+	[PassportNumber] [nchar](6) NOT NULL,
  CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UserToTicket]    Script Date: 08.06.2023 14:17:24 ******/
+/****** Object:  Table [dbo].[UserToTicket]    Script Date: 09.06.2023 20:08:34 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -127,20 +144,30 @@ ALTER TABLE [dbo].[Transaction] ADD  CONSTRAINT [DF_Transaction_IsComplited]  DE
 GO
 ALTER TABLE [dbo].[User] ADD  CONSTRAINT [DF_User_Balance]  DEFAULT ((0)) FOR [Balance]
 GO
-ALTER TABLE [dbo].[OnlineKassa]  WITH CHECK ADD  CONSTRAINT [FK_OnlineKassa_PaymentType] FOREIGN KEY([PaymentTypeId])
-REFERENCES [dbo].[PaymentType] ([Id])
+ALTER TABLE [dbo].[Route]  WITH CHECK ADD  CONSTRAINT [FK_Route_City] FOREIGN KEY([ArrivalCityId])
+REFERENCES [dbo].[City] ([Id])
 GO
-ALTER TABLE [dbo].[OnlineKassa] CHECK CONSTRAINT [FK_OnlineKassa_PaymentType]
+ALTER TABLE [dbo].[Route] CHECK CONSTRAINT [FK_Route_City]
+GO
+ALTER TABLE [dbo].[Route]  WITH CHECK ADD  CONSTRAINT [FK_Route_City1] FOREIGN KEY([DepartureCityId])
+REFERENCES [dbo].[City] ([Id])
+GO
+ALTER TABLE [dbo].[Route] CHECK CONSTRAINT [FK_Route_City1]
 GO
 ALTER TABLE [dbo].[Ticket]  WITH CHECK ADD  CONSTRAINT [FK_Ticket_Route] FOREIGN KEY([RouteId])
 REFERENCES [dbo].[Route] ([Id])
 GO
 ALTER TABLE [dbo].[Ticket] CHECK CONSTRAINT [FK_Ticket_Route]
 GO
-ALTER TABLE [dbo].[Transaction]  WITH CHECK ADD  CONSTRAINT [FK_Transaction_OnlineKassa] FOREIGN KEY([KassaId])
-REFERENCES [dbo].[OnlineKassa] ([Id])
+ALTER TABLE [dbo].[Ticket]  WITH CHECK ADD  CONSTRAINT [FK_Ticket_Status] FOREIGN KEY([StatusId])
+REFERENCES [dbo].[Status] ([Id])
 GO
-ALTER TABLE [dbo].[Transaction] CHECK CONSTRAINT [FK_Transaction_OnlineKassa]
+ALTER TABLE [dbo].[Ticket] CHECK CONSTRAINT [FK_Ticket_Status]
+GO
+ALTER TABLE [dbo].[Transaction]  WITH CHECK ADD  CONSTRAINT [FK_Transaction_PaymentType] FOREIGN KEY([PaymentTypeId])
+REFERENCES [dbo].[PaymentType] ([Id])
+GO
+ALTER TABLE [dbo].[Transaction] CHECK CONSTRAINT [FK_Transaction_PaymentType]
 GO
 ALTER TABLE [dbo].[Transaction]  WITH CHECK ADD  CONSTRAINT [FK_Transaction_User] FOREIGN KEY([UserId])
 REFERENCES [dbo].[User] ([Id])
