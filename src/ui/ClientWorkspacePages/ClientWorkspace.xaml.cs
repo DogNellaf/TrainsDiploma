@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using TrainsClasses;
+using ui.Helper;
 
 namespace ui
 {
@@ -14,7 +15,7 @@ namespace ui
         {
             _client = client;
             InitializeComponent();
-            nameLabel.Content = $"Добро пожаловать, {_client.Login}!";
+            nameLabel.Content = $"Добро пожаловать, {client.Login.Trim(' ')}!";
             _previous = previous;
         }
 

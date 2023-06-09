@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using TrainsClasses;
+using ui.Helper;
 
 namespace ui
 {
@@ -9,15 +10,15 @@ namespace ui
     public partial class WorkerWorkspace : Window
     {
         private Window _previous;
-        private User _worker;
-        public WorkerWorkspace(Window previous, User worker)
+        private User _user;
+        public WorkerWorkspace(Window previous, User user)
         {
             InitializeComponent();
             _previous = previous;
-            _worker = worker;
+            _user = user;
 
-            nameLabel.Content = $"Добро пожаловать, {worker.Login}!";
-            //roleLabel.Content = $"{RequestClient.GetPositionName(worker.PositionId)}";
+            nameLabel.Content = $"Добро пожаловать, {user.Login.Trim(' ')}!";
+            roleLabel.Content = RequestClient.GetRole(user.RoleId).Name;
         }
 
         // кнопка выхода
