@@ -111,6 +111,15 @@ namespace ui.Helper
             SendRequest($"{typeof(T).Name}/{id}", "DELETE");
         }
 
+        // добавить билет пользователю
+        public static void AddTicket(int userId, int routeId)
+        {
+            var data = new Dictionary<string, int>() { {"userId", userId }, { "routeId", routeId } };
+            var json = JsonConvert.SerializeObject(data);
+            SendRequest($"ticket/user", "POST");
+        }
+
+
         // отправить запрос - общая функция
         private static string SendRequest(string url, string method, string body = "")
         {

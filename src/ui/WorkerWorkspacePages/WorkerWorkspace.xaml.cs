@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using TrainsClasses;
+using ui.AdminWorkspacePages;
 using ui.Helper;
 
 namespace ui
@@ -26,6 +27,27 @@ namespace ui
         {
             _previous.Show();
             Close();
+        }
+
+        private void offlineTicketsButton_Click(object sender, RoutedEventArgs e)
+        {
+            new OfflineTicketsEditor(this, _user).Show();
+        }
+
+        private void ticketsButton_Copy_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void routesButton_Click(object sender, RoutedEventArgs e)
+        {
+            Hide();
+            new RouteEditor(this, _user).Show();
+        }
+
+        private void calendarButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
