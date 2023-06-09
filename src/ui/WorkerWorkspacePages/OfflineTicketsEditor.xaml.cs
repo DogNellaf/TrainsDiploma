@@ -69,5 +69,13 @@ namespace ui.AdminWorkspacePages
             MessageBox.Show("Билет успешно продан");
             Close();
         }
+
+        // когда дата изменена, нужно подгрузить рейсы в этот день
+        private void datePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var date = datePicker.SelectedDate.Value;
+            routesBox.ItemsSource = RequestClient.GetObjects<Route>().
+                Where(x => x.DepartureTime.Month == date.Month && x.DepartureTime.Year == date.Year && x.DepartureTime.Day == date.Day);
+        }
     }
 }

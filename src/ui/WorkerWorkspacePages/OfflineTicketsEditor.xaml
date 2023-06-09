@@ -4,21 +4,27 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Продажа билетов" Height="288" Width="396" ResizeMode="NoResize">
+        Title="Продажа билетов" Height="371" Width="405" ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Label x:Name="nameLabel" Content="Продажа билетов" Margin="10,10,10,0" VerticalAlignment="Top" Height="70" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="24"/>
-        <Button x:Name="sellButton" Content="Продать" HorizontalAlignment="Center" VerticalAlignment="Top" Height="43" Width="376" IsCancel="True" Margin="0,200,0,0" Click="sellButton_Click" FontSize="20"/>
-        <TextBox x:Name="loginBox" HorizontalAlignment="Left" Margin="93,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="287" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        <Button x:Name="sellButton" Content="Продать" HorizontalAlignment="Left" VerticalAlignment="Top" Height="43" Width="369" IsCancel="True" Margin="10,286,0,0" Click="sellButton_Click" FontSize="20" HorizontalContentAlignment="Center"/>
+        <TextBox x:Name="loginBox" HorizontalAlignment="Left" Margin="94,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="287" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
         <Label Content="Логин" HorizontalAlignment="Left" Margin="5,80,0,0" VerticalAlignment="Top" Width="84"/>
         <Label Content="Пароль" HorizontalAlignment="Left" Margin="5,111,0,0" VerticalAlignment="Top" Width="84"/>
         <TextBox x:Name="passwordBox" HorizontalAlignment="Left" Margin="94,111,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="286" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-        <Label Content="Дата поездки" HorizontalAlignment="Left" Margin="5,141,0,0" VerticalAlignment="Top"/>
-        <DatePicker x:Name="datePicker" HorizontalAlignment="Left" Margin="94,142,0,0" VerticalAlignment="Top" Height="24" Width="286"/>
-        <Label Content="Направление" HorizontalAlignment="Left" Margin="5,170,0,0" VerticalAlignment="Top" Width="84"/>
-        <ComboBox x:Name="routesBox" HorizontalAlignment="Left" Margin="94,171,0,0" VerticalAlignment="Top" Width="286" Height="24"/>
+        <Label Content="Дата поездки" HorizontalAlignment="Left" Margin="5,204,0,0" VerticalAlignment="Top"/>
+        <DatePicker x:Name="datePicker" HorizontalAlignment="Left" Margin="94,206,0,0" VerticalAlignment="Top" Height="24" Width="286" SelectedDateChanged="datePicker_SelectedDateChanged"/>
+        <Label Content="Направление" HorizontalAlignment="Left" Margin="5,235,0,0" VerticalAlignment="Top" Width="84"/>
+        <ComboBox x:Name="routesBox" HorizontalAlignment="Left" Margin="94,237,0,0" VerticalAlignment="Top" Width="286" Height="24"/>
+        <Label Content="Серия пасп." HorizontalAlignment="Left" Margin="5,142,0,0" VerticalAlignment="Top" Width="84"/>
+        <Label Content="Номер пасп." HorizontalAlignment="Left" Margin="5,173,0,0" VerticalAlignment="Top" Width="84"/>
+        <TextBox x:Name="serialBox" HorizontalAlignment="Left" Margin="94,142,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="286" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        <TextBox x:Name="numberBox" HorizontalAlignment="Left" Margin="94,173,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="286" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        <RadioButton Content="Оплата наличными" HorizontalAlignment="Left" Margin="10,266,0,0" VerticalAlignment="Top"/>
+        <RadioButton Content="Оплата со счета" HorizontalAlignment="Left" Margin="272,266,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
