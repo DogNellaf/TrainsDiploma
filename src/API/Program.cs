@@ -8,8 +8,6 @@ namespace API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
             builder.Services.AddTransient<UserService, UserService>();
             builder.Services.AddTransient<RoleService, RoleService>();
@@ -20,7 +18,6 @@ namespace API
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -28,7 +25,6 @@ namespace API
             }
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
