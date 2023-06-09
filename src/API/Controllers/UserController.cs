@@ -1,6 +1,5 @@
 ﻿using API.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 using TrainsClasses;
 
 namespace API.Controllers

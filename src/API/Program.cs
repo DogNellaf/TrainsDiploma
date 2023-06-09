@@ -14,6 +14,7 @@ namespace API
             builder.Services.AddTransient<UserService, UserService>();
             builder.Services.AddTransient<RoleService, RoleService>();
             builder.Services.AddTransient<RouteService, RouteService>();
+            builder.Services.AddTransient<TicketService, TicketService>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
