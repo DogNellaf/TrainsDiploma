@@ -3,22 +3,22 @@
 namespace TrainsClasses
 {
     [DataContract]
-    public class PaymentType : Model
+    public class City : Model
     {
         [DataMember]
         public string Name { get; set; }
 
-        public PaymentType() : base(0)
+        public City() : base(0)
         {
 
         }
 
-        public PaymentType(object[] items) : base((int)items[0])
+        public City(object[] items) : base((int)items[0])
         {
             Name = (string)items[1];
         }
 
-        public PaymentType(int id, string name) : base(id)
+        public City(int id, string name) : base(id)
         {
             Name = name;
         }

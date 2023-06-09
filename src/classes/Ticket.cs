@@ -12,6 +12,8 @@ namespace TrainsClasses
         public float Price { get; set; }
         [DataMember]
         public int RouteId { get; set; }
+        [DataMember]
+        public int StatusId { get; set; }
 
         public Ticket() : base(0)
         {
@@ -25,7 +27,7 @@ namespace TrainsClasses
             RouteId = (int)items[3];
         }
 
-        public Ticket(int id, DateTime buyTime, float price, int routeId, string arrivalCity) : base(id)
+        public Ticket(int id, DateTime buyTime, float price, int routeId) : base(id)
         {
             BuyTime = buyTime;
             Price = price;

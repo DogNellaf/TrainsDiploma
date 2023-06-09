@@ -14,6 +14,10 @@ namespace TrainsClasses
         public float Balance { get; set; }
         [DataMember]
         public int RoleId { get; set; }
+        [DataMember]
+        public string PassportSeries { get; set; }
+        [DataMember]
+        public string PassportNumber { get; set; }
 
         public User(): base(0)
         {
@@ -24,20 +28,20 @@ namespace TrainsClasses
         {
             Login = (string)items[1];
             Token = (string)items[2];
-            //if (items[4] != DBNull.Value)
-            //{
-            //    Role = (string)items[4];
-            //}
             Balance = Convert.ToSingle(items[3]);
             RoleId = (int)items[4];
+            PassportSeries = (string)items[5];
+            PassportNumber = (string)items[6];
         }
 
-        public User(int id, string login, string token, float balance, int roleId) : base(id)
+        public User(int id, string login, string token, float balance, int roleId, string series, string number) : base(id)
         {
             Login = login;
             Token = token;
             Balance = balance;
             RoleId = roleId;
+            PassportSeries = series;
+            PassportNumber = number;
         }
     }
 }
