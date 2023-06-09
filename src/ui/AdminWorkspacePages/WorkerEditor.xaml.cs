@@ -75,13 +75,14 @@ namespace ui.AdminWorkspacePages
                 if (user is null)
                 {
 
-                    RequestClient.CreateUser(userData.Login, userData.Token, userData.Balance, userData.RoleId);
+                    // добавить считывание данных
+                    RequestClient.CreateUser(userData.Login, userData.Token, userData.Balance, userData.RoleId, userData.PassportSeries, userData.PassportNumber);
 
                     MessageBox.Show("Пользователь был успешно создан");
                 }
                 else
                 {
-                    RequestClient.UpdateUser(userData.Id, userData.Login, userData.Token, userData.Balance, userData.RoleId);
+                    RequestClient.UpdateUser(userData.Id, userData.Login, userData.Token, userData.Balance, userData.RoleId, userData.PassportSeries, userData.PassportNumber);
 
                     MessageBox.Show("Данные пользователя успешно обновлены");
                 }

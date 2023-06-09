@@ -61,12 +61,10 @@ namespace ui.AdminWorkspacePages
 
             if (user is null)
             {
-                RequestClient.CreateUser(login, password, 0, 3);
+                RequestClient.CreateUser(login, password, 0, 3, "", ""); // TODO: добавить считывание данных
 
                 MessageBox.Show("Пользователь отсутствует в базе, создан новый");
             }
-
-
 
             MessageBox.Show("Билет успешно продан");
             Close();

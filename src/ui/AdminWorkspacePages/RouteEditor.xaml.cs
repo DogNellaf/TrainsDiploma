@@ -50,18 +50,29 @@ namespace ui.AdminWorkspacePages
                 grid.CommitEdit(DataGridEditingUnit.Row, true);
 
                 var items = ((DataGrid)sender).Items;
-
+                var cities = RequestClient.GetObjects<City>();
                 var data = (Route)items[selectedRowIndex];
+                var departureCIty = cities.Where(x => x.Id == data.DepartureCityId).FirstOrDefault();
 
-                if (string.IsNullOrEmpty(data.DepartureCity))
+                if (departureCIty is null)
                 {
-                    MessageBox.Show("Перед сохранением введите город отправления");
-                    return;
+                    // TODO создавать город
+                    //MessageBox.Show("Перед сохранением введите город отправления");
+                    //return;
                 }
 
-                if (string.IsNullOrEmpty(data.ArrivalCity))
+                var arrivalCity = cities.Where(x => x.Id == data.ArrivalCityId).FirstOrDefault();
+
+                if (arrivalCity is null)
                 {
-                    MessageBox.Show("Перед сохранением введите город прибытия");
+                    // TODO создавать город
+                    //MessageBox.Show("Перед сохранением введите город прибытия");
+                    //return;
+                }
+
+                if (data.Price <= 0)
+                {
+                    MessageBox.Show("Цена должна быть больше 0");
                     return;
                 }
 
@@ -72,7 +83,7 @@ namespace ui.AdminWorkspacePages
                     return;
                 }
 
-                if (data.DurationInMinutes <= 0)
+                if (data.Duration <= 0)
                 {
                     MessageBox.Show("Перед сохранением введите длительность поездки");
                     return;
@@ -85,13 +96,13 @@ namespace ui.AdminWorkspacePages
                 if (route is null)
                 {
 
-                    RequestClient.CreateRoute(data.DepartureTime, data.DepartureCity, data.DurationInMinutes, data.ArrivalCity);
+                    RequestClient.CreateRoute(data.DepartureTime, data.DepartureCityId, data.Duration, data.ArrivalCityId, data.Price);
 
                     MessageBox.Show("Направление было успешно создано");
                 }
                 else
                 {
-                    RequestClient.UpdateRoute(data.Id, data.DepartureTime, data.DepartureCity, data.DurationInMinutes, data.ArrivalCity);
+                    RequestClient.UpdateRoute(data.Id, data.DepartureTime, data.DepartureCityId, data.Duration, data.ArrivalCityId, data.Price);
 
                     MessageBox.Show("Направление было успешно обновлено");
                 }

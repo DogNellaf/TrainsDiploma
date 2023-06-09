@@ -54,7 +54,7 @@ namespace ui.Helper
         }
 
         // регистрация клиента
-        public static User? Register(string login, string password) => CreateUser(login, password, 0, 1);
+        public static User? Register(string login, string password) => CreateUser(login, password, 0, 1, "", "");
 
         // проверить, является ли пользователь админом по id
         public static bool CheckAdmin(int id) => bool.Parse(SendRequest($"user/isadmin?&id={id}", "GET"));
@@ -66,9 +66,9 @@ namespace ui.Helper
         public static string GenerateNewPassword(int id, string password, string token) => SendRequest($"user/{id}/password?password={password}&token={token}", "PUT");
 
         // создать пользователя
-        public static User CreateUser(string login, string token, float balance, int roleId)
+        public static User CreateUser(string login, string token, float balance, int roleId, string series, string number)
         {
-            var user = new User(0, login, token, balance, roleId);
+            var user = new User(0, login, token, balance, roleId, series, number);
             var json = JsonConvert.SerializeObject(user);
             var result = SendRequest($"user", "POST", json);
 
@@ -76,9 +76,9 @@ namespace ui.Helper
         }
 
         // обновить пользователя
-        public static User UpdateUser(int id, string login, string token, float balance, int roleId)
+        public static User UpdateUser(int id, string login, string token, float balance, int roleId, string series, string number)
         {
-            var user = new User(id, login, token, balance, roleId);
+            var user = new User(id, login, token, balance, roleId, series, number);
             var json = JsonConvert.SerializeObject(user);
             var result = SendRequest($"user", "PUT", json);
 
@@ -86,9 +86,9 @@ namespace ui.Helper
         }
 
         // создать направление
-        public static Route CreateRoute(DateTime departureTime, string departureCity, int durationInMinutes, string arrivalCity)
+        public static Route CreateRoute(DateTime departureTime, int departureCityId, int durationInMinutes, int arrivalCityId, float price)
         {
-            var route = new Route(0, departureTime, departureCity, durationInMinutes, arrivalCity);
+            var route = new Route(0, departureTime, departureCityId, durationInMinutes, arrivalCityId, price);
             var json = JsonConvert.SerializeObject(route);
             var result = SendRequest($"route", "POST", json);
 
@@ -96,9 +96,9 @@ namespace ui.Helper
         }
 
         // обновить направление
-        public static Route UpdateRoute(int id, DateTime departureTime, string departureCity, int durationInMinutes, string arrivalCity)
+        public static Route UpdateRoute(int id, DateTime departureTime, int departureCityId, int durationInMinutes, int arrivalCityId, float price)
         {
-            var route = new Route(id, departureTime, departureCity, durationInMinutes, arrivalCity);
+            var route = new Route(id, departureTime, departureCityId, durationInMinutes, arrivalCityId, price);
             var json = JsonConvert.SerializeObject(route);
             var result = SendRequest($"route", "PUT", json);
 
@@ -114,9 +114,10 @@ namespace ui.Helper
         // добавить билет пользователю
         public static void AddTicket(int userId, int routeId)
         {
-            var data = new Dictionary<string, int>() { {"userId", userId }, { "routeId", routeId } };
-            var json = JsonConvert.SerializeObject(data);
-            SendRequest($"ticket/user", "POST");
+            //var ticket = new Ticket(0, DateTime.Now, )
+            //var data = new Dictionary<string, int>() { {"userId", userId }, { "routeId", routeId } };
+            //var json = JsonConvert.SerializeObject(data);
+            //SendRequest($"ticket", "POST");
         }
 
 
