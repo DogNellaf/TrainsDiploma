@@ -13,6 +13,7 @@ namespace API
             builder.Services.AddTransient<RoleService, RoleService>();
             builder.Services.AddTransient<RouteService, RouteService>();
             builder.Services.AddTransient<TicketService, TicketService>();
+            builder.Services.AddTransient<CityService, CityService>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
