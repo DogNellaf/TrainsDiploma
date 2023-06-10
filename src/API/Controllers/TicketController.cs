@@ -63,38 +63,18 @@ namespace API.Controllers
             return BadRequest();
         }
 
-        //// PUT: user/5
-        //[HttpPut("")]
-        //public ActionResult Edit([FromBody] User ticket, string token)
-        //{
-        //    //if (!_userService.CheckToken(token))
-        //    //{
-        //    //    return Unauthorized();
-        //    //}
+        [HttpGet("/ticket/user")]
+        public ActionResult GetUserTickets(int userId, string token)
+        {
+            var result = _ticketService.GetUserTickets(userId);
+            return Ok(result);
+        }
 
-        //    if (ticket.Id < 0)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    var found = _ticketService.Get(ticket.Id);
-
-        //    if (found is null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _ticketService.Update(ticket);
-
-        //    return Ok(ticket);
-        //}
-
-        // DELETE: user/5
-        //[HttpDelete("{id:int}")]
-        //public ActionResult Delete(int id)
-        //{
-        //    _ticketService.Delete(id);
-        //    return Ok();
-        //}
+        [HttpPut("/ticket/user")]
+        public ActionResult ReturnTicket(int ticketId, string token)
+        {
+            _ticketService.ReturnTicket(ticketId);
+            return Ok();
+        }
     }
 }

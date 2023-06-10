@@ -28,6 +28,16 @@ namespace API.Services
             return true;
         }
 
+        public List<Ticket> GetUserTickets(int id)
+        {
+            return Database.GetUserTickets(id);
+        }
+
+        public void ReturnTicket(int id)
+        {
+            Database.ReturnTicket(id);
+        }
+
         public override string GetUpdateValues(Ticket ticket)
         {
             return $"BuyTime = '{ticket.BuyTime:yyyy-dd-MM HH:mm:ss.fff}', " +
