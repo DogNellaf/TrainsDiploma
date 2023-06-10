@@ -102,7 +102,7 @@ namespace ui.AdminWorkspacePages
             }
 
             // создание билета
-            var ticket = new Ticket(-1, now, route.Price, route.Id, (int)Status.Created);
+            var ticket = new Ticket(-1, now, route.Price, route.Id, (int)Status.Created, user.Id);
 
             // если покупка с баланса
             if (balanceButton.IsChecked == true)
@@ -131,10 +131,10 @@ namespace ui.AdminWorkspacePages
             }
 
             // создание билета
-            ticket = RequestClient.CreateTicket(now, route.Price, route.Id, (int)Status.Created);
+            ticket = RequestClient.CreateTicket(now, route.Price, route.Id, (int)Status.Created, user.Id);
 
             // добавление билета пользователю
-            RequestClient.AddTicket(user.Id, ticket.Id, _worker);
+            //RequestClient.AddTicket(user.Id, ticket.Id, _worker);
 
             MessageBox.Show("Билет успешно продан");
         }

@@ -37,10 +37,15 @@ namespace ui.AdminWorkspacePages
             }
             else
             {
-                RemoveLogicalChild(allButton);
+                //RemoveLogicalChild(allButton);
+                //RemoveVisualChild(allButton);
                 ticketsGrid.ItemsSource = RequestClient.GetUserTickets(user.Id, user);
+                allButton.Content = "Только активные";
+                allButton.Click -= allButton_Click;
+                allButton.Click += FindMyActiveTickets;
                 //ticketsGrid.ItemsSource = RequestClient.GetObjects<Ticket>();
             }
+            ticketsGrid.IsReadOnly = true;
         }
 
         private void exitButton_Click(object sender, RoutedEventArgs e)
@@ -62,7 +67,14 @@ namespace ui.AdminWorkspacePages
 
 
             ticketsGrid.ItemsSource = RequestClient.GetUserTickets(user.Id, _user);
+            ticketsGrid.IsReadOnly = true;
             MessageBox.Show("Билеты успешно выбраны");
+        }
+
+        private void FindMyActiveTickets(object sender, RoutedEventArgs e)
+        {
+            ticketsGrid.ItemsSource = RequestClient.GetUserTickets(_user.Id, _user).Where(x => x.StatusId == 1);
+            ticketsGrid.IsReadOnly = true;
         }
 
         private void returnButton_Click(object sender, RoutedEventArgs e)
@@ -93,6 +105,7 @@ namespace ui.AdminWorkspacePages
         private void allButton_Click(object sender, RoutedEventArgs e)
         {
             ticketsGrid.ItemsSource = RequestClient.GetObjects<Ticket>();
+            ticketsGrid.IsReadOnly = true;
             MessageBox.Show("Выбраны все билеты");
         }
     }

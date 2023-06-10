@@ -106,9 +106,9 @@ namespace ui.Helper
         }
 
         // создать билет
-        public static Ticket CreateTicket(DateTime time, float price, int routeId, int statusId)
+        public static Ticket CreateTicket(DateTime time, float price, int routeId, int statusId, int userId)
         {
-            var ticket = new Ticket(-1, time, price, routeId, statusId);
+            var ticket = new Ticket(-1, time, price, routeId, statusId, userId);
             var json = JsonConvert.SerializeObject(ticket);
             var result = SendRequest($"ticket", "POST", json);
 
