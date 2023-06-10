@@ -14,6 +14,8 @@ namespace TrainsClasses
         public int RouteId { get; set; }
         [DataMember]
         public int StatusId { get; set; }
+        [DataMember]
+        public int UserId { get; set; }
 
         public Ticket() : base(-1)
         {
@@ -26,14 +28,16 @@ namespace TrainsClasses
             Price = float.Parse(items[2].ToString());
             RouteId = (int)items[3];
             StatusId = (int)items[4];
+            UserId = (int)items[5];
         }
 
-        public Ticket(int id, DateTime buyTime, float price, int routeId, int statusId) : base(id)
+        public Ticket(int id, DateTime buyTime, float price, int routeId, int statusId, int userId) : base(id)
         {
             BuyTime = buyTime;
             Price = price;
             RouteId = routeId;
             StatusId = statusId;
+            UserId = userId;
         }
     }
 }
