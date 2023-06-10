@@ -13,7 +13,7 @@ CREATE TABLE [dbo].[City](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Role]    Script Date: 10.06.2023 11:08:24 ******/
+/****** Object:  Table [dbo].[Role]    Script Date: 11.06.2023 0:58:15 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29,7 +29,7 @@ CREATE TABLE [dbo].[Role](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Route]    Script Date: 10.06.2023 11:08:24 ******/
+/****** Object:  Table [dbo].[Route]    Script Date: 11.06.2023 0:58:15 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -47,7 +47,7 @@ CREATE TABLE [dbo].[Route](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Status]    Script Date: 10.06.2023 11:08:24 ******/
+/****** Object:  Table [dbo].[Status]    Script Date: 11.06.2023 0:58:15 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -61,7 +61,7 @@ CREATE TABLE [dbo].[Status](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Ticket]    Script Date: 10.06.2023 11:08:24 ******/
+/****** Object:  Table [dbo].[Ticket]    Script Date: 11.06.2023 0:58:15 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -72,13 +72,14 @@ CREATE TABLE [dbo].[Ticket](
 	[Price] [float] NOT NULL,
 	[RouteId] [int] NOT NULL,
 	[StatusId] [int] NOT NULL,
+	[UserId] [int] NOT NULL,
  CONSTRAINT [PK_Ticket] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Transaction]    Script Date: 10.06.2023 11:08:24 ******/
+/****** Object:  Table [dbo].[Transaction]    Script Date: 11.06.2023 0:58:15 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -97,7 +98,7 @@ CREATE TABLE [dbo].[Transaction](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[User]    Script Date: 10.06.2023 11:08:24 ******/
+/****** Object:  Table [dbo].[User]    Script Date: 11.06.2023 0:58:15 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -115,16 +116,6 @@ CREATE TABLE [dbo].[User](
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[UserToTicket]    Script Date: 10.06.2023 11:08:24 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[UserToTicket](
-	[UserId] [int] NOT NULL,
-	[TicketId] [int] NOT NULL
-) ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[Transaction] ADD  CONSTRAINT [DF_Transaction_IsComplited]  DEFAULT ((0)) FOR [IsComplited]
 GO
@@ -150,6 +141,11 @@ REFERENCES [dbo].[Status] ([Id])
 GO
 ALTER TABLE [dbo].[Ticket] CHECK CONSTRAINT [FK_Ticket_Status]
 GO
+ALTER TABLE [dbo].[Ticket]  WITH CHECK ADD  CONSTRAINT [FK_Ticket_User] FOREIGN KEY([UserId])
+REFERENCES [dbo].[User] ([Id])
+GO
+ALTER TABLE [dbo].[Ticket] CHECK CONSTRAINT [FK_Ticket_User]
+GO
 ALTER TABLE [dbo].[Transaction]  WITH CHECK ADD  CONSTRAINT [FK_Transaction_User] FOREIGN KEY([UserId])
 REFERENCES [dbo].[User] ([Id])
 GO
@@ -159,16 +155,6 @@ ALTER TABLE [dbo].[User]  WITH CHECK ADD  CONSTRAINT [FK_User_Role] FOREIGN KEY(
 REFERENCES [dbo].[Role] ([Id])
 GO
 ALTER TABLE [dbo].[User] CHECK CONSTRAINT [FK_User_Role]
-GO
-ALTER TABLE [dbo].[UserToTicket]  WITH CHECK ADD  CONSTRAINT [FK_UserToTicket_Ticket] FOREIGN KEY([TicketId])
-REFERENCES [dbo].[Ticket] ([Id])
-GO
-ALTER TABLE [dbo].[UserToTicket] CHECK CONSTRAINT [FK_UserToTicket_Ticket]
-GO
-ALTER TABLE [dbo].[UserToTicket]  WITH CHECK ADD  CONSTRAINT [FK_UserToTicket_User] FOREIGN KEY([UserId])
-REFERENCES [dbo].[User] ([Id])
-GO
-ALTER TABLE [dbo].[UserToTicket] CHECK CONSTRAINT [FK_UserToTicket_User]
 GO
 USE [master]
 GO
