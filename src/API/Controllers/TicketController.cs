@@ -1,9 +1,12 @@
 ﻿using API.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Sockets;
+using System.Text.Json.Nodes;
 using TrainsClasses;
 
 namespace API.Controllers
 {
+    [Route("/ticket")]
     public class TicketController: Controller
     {
         private readonly TicketService _ticketService;
@@ -47,6 +50,17 @@ namespace API.Controllers
             }
             ticket = _ticketService.Add(ticket);
             return Ok(ticket);
+        }
+
+        [HttpPost("/ticket/user")]
+        public ActionResult AddTicketToUser(int userId, int ticketId, string token)
+        {
+            var result = _ticketService.AddTicketToUser(userId, ticketId);
+            if (result)
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
 
         //// PUT: user/5

@@ -77,12 +77,24 @@ namespace API.Services
 
         public override string GetUpdateValues(User user)
         {
-            return $"login = '{user.Login}', token = '{user.Token}', balance = {user.Balance}, roleId = {user.RoleId}, PassportSeries = '{user.PassportSeries}',  PassportNumber = '{user.PassportNumber}'";
+            return $"login = '{user.Login}', " +
+                   $"token = '{user.Token}', " +
+                   $"balance = {user.Balance}, " +
+                   $"roleId = {user.RoleId}, " +
+                   $"PassportSeries = '{user.PassportSeries}',  " +
+                   $"PassportNumber = '{user.PassportNumber}'";
         }
 
         public override string GetCreateValues(User user)
         {
-            return $"(login, token, balance, roleId) VALUES ('{user.Login}', '{user.Token}', {user.Balance}, {user.RoleId}, PassportSeries = '{user.PassportSeries}',  PassportNumber = '{user.PassportNumber}')";
+            return $"(login, token, balance, roleId, PassportSeries, PassportNumber) " +
+                   $"VALUES (" +
+                   $"'{user.Login}', " +
+                   $"'{user.Token}', " +
+                   $"{user.Balance}, " +
+                   $"{user.RoleId}, " +
+                   $"'{user.PassportSeries}', " +
+                   $"'{user.PassportNumber}')";
         }
     }
 }

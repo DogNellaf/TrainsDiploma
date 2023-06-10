@@ -14,6 +14,7 @@ namespace API
             builder.Services.AddTransient<RouteService, RouteService>();
             builder.Services.AddTransient<TicketService, TicketService>();
             builder.Services.AddTransient<CityService, CityService>();
+            builder.Services.AddTransient<TransactionService, TransactionService>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

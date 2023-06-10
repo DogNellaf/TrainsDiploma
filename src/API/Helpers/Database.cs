@@ -173,5 +173,11 @@ namespace RestaurantsClasses
             var token = Encoder.Encode(password);
             ExecuteQuery($"UPDATE dbo.\"User\" SET token = '{token}' WHERE id = {id}");
         }
+
+        // прикрепить билет к пользователю
+        public static void AddTicketToUser(int userId, int ticketId)
+        {
+            ExecuteQuery($"INSERT INTO dbo.UserToTicket VALUES ({userId}, {ticketId})");
+        }
     }
 }
