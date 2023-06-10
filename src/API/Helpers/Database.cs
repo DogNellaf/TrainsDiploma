@@ -170,16 +170,16 @@ namespace RestaurantsClasses
         // проверить, является ли пользователь админом, по id
         public static List<Ticket> GetUserTickets(int id)
         {
-            DataTable table = ExecuteQuery($"SELECT t.Id, t.BuyTime, t.Price, t.RouteId FROM UserToTicket as ut JOIN Ticket as t on t.Id = ut.TicketId WHERE UserId = {id}");
+            DataTable table = ExecuteQuery($"SELECT * FROM Ticket WHERE UserId = {id}");
             var result = new List<Ticket>();
 
             // проходимся по каждой строчке таблицы-результата
             foreach (DataRow row in table.Rows)
             {
                 // в конструктор передаем единственный параметр - все столбцы строки
-                var parameters = new object[1];
-                parameters[0] = row.ItemArray;
-                result.Add(new Ticket(parameters));
+                //var parameters = new object[1];
+                //parameters[0] = row.ItemArray;
+                result.Add(new Ticket(row.ItemArray));
             }
 
             return result;

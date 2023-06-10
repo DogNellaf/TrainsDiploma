@@ -43,17 +43,19 @@ namespace API.Services
             return $"BuyTime = '{ticket.BuyTime:yyyy-dd-MM HH:mm:ss.fff}', " +
                    $"Price = {ticket.Price}, " +
                    $"RouteId = {ticket.RouteId}, " +
-                   $"StatusId = {ticket.StatusId}";
+                   $"StatusId = {ticket.StatusId}, " +
+                   $"UserId = {ticket.UserId}";
         }
 
         public override string GetCreateValues(Ticket ticket)
         {
-            return $"(BuyTime, Price, RouteId, StatusId) " +
+            return $"(BuyTime, Price, RouteId, StatusId, UserId) " +
                    $"VALUES (" +
                    $"'{ticket.BuyTime:yyyy-dd-MM HH:mm:ss.fff}', " +
                    $"{ticket.Price}, " +
                    $"{ticket.RouteId}, " +
-                   $"{ticket.StatusId})";
+                   $"{ticket.StatusId}, " +
+                   $"{ticket.UserId})";
         }
     }
 }
