@@ -7,6 +7,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using TrainsClasses;
 using ui.Helper;
+using TrainsClasses.Enums;
 
 namespace ui.AdminWorkspacePages
 {
@@ -14,43 +15,28 @@ namespace ui.AdminWorkspacePages
     public partial class OfflineTicketsEditor : Window
     {
         private Window _previous;
-        private User _admin;
-        public OfflineTicketsEditor(Window previous, User admin)
+        private User _worker;
+        private List<Route> _routes = new List<Route>();
+        public OfflineTicketsEditor(Window previous, User worker)
         {
             InitializeComponent();
             _previous = previous;
-            _admin = admin;
-
-            var routes = RequestClient.GetObjects<Route>();
-            routesBox.ItemsSource = routes;
+            _worker = worker;
+            datePicker.SelectedDate = DateTime.Now;
         }
 
         private void sellButton_Click(object sender, RoutedEventArgs e)
         {
             var login = loginBox.Text;
             var password = passwordBox.Text;
+            var series = serialBox.Text;
+            var number = numberBox.Text;
             var date = datePicker.DisplayDate;
-            var route = (Route)routesBox.SelectedItem;
+            var now = DateTime.Now;
+            var routeId = int.Parse(routesBox.SelectedItem.ToString().Split(' ')[1]);
+            bool isNewUser = false;
 
-            if (string.IsNullOrEmpty(login))
-            {
-                MessageBox.Show("Не был введен логин");
-                return;
-            }
-
-            //TODO перенести в создание
-            if (string.IsNullOrEmpty(password))
-            {
-                MessageBox.Show("Не был введен пароль");
-                return;
-            }
-
-
-            if (date.Year <= 1970)
-            {
-                MessageBox.Show("Год должен быть больше 1970");
-                return;
-            }
+            var route = RequestClient.GetObjects<Route>().Where(x => x.Id == routeId).FirstOrDefault();
 
             if (route is null)
             {
@@ -58,25 +44,153 @@ namespace ui.AdminWorkspacePages
                 return;
             }
 
-            var user = RequestClient.GetObjects<User>().Where(x => x.Login == login).FirstOrDefault();
+            if (string.IsNullOrEmpty(login))
+            {
+                MessageBox.Show("Не был введен логин");
+                return;
+            }
+
+            var user = RequestClient.GetObjects<User>().Where(x => x.Login.Trim() == login).FirstOrDefault();
 
             if (user is null)
             {
-                RequestClient.CreateUser(login, password, 0, 3, "", ""); // TODO: добавить считывание данных
+                if (string.IsNullOrEmpty(password))
+                {
+                    MessageBox.Show("Не был введен пароль");
+                    return;
+                }
 
+                if (string.IsNullOrEmpty(series))
+                {
+                    MessageBox.Show("Не была введена серия паспорта");
+                    return;
+                }
+
+                if (series.Length != 4)
+                {
+                    MessageBox.Show("Серия должна содержать четыре цифры");
+                    return;
+                }
+
+                if (!int.TryParse(series, out int result))
+                {
+                    MessageBox.Show("Серия должна состоять из цифр");
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(number))
+                {
+                    MessageBox.Show("Не был введен номер паспорта");
+                    return;
+                }
+
+                if (number.Length != 6)
+                {
+                    MessageBox.Show("Номер должен содержать шесть цифр");
+                    return;
+                }
+
+                if (!int.TryParse(number, out int result2))
+                {
+                    MessageBox.Show("Номер должен состоять из цифр");
+                    return;
+                }
+
+                user = RequestClient.CreateUser(login, password, 0, 1, series, number);
+                isNewUser = true;
                 MessageBox.Show("Пользователь отсутствует в базе, создан новый");
             }
 
+            // создание билета
+            var ticket = new Ticket(-1, now, route.Price, route.Id, (int)Status.Created);
+
+            // если покупка с баланса
+            if (balanceButton.IsChecked == true)
+            {
+                // если не хватает средств
+                if (user.Balance < route.Price)
+                {
+                    MessageBox.Show("Не хватает денег на балансе аккаунта");
+                    return;
+                }
+                else
+                {
+                    // созданме транзакции
+                    RequestClient.CreateTransaction(user.Id, -route.Price, now, "Баланс", "Оплата билета", true);
+
+                    // уменьшение баланса пользователя
+                    user.Balance -= route.Price;
+                    RequestClient.UpdateUser(user.Id, user.Login, user.Token, user.Balance, user.RoleId, user.PassportSeries, user.PassportNumber);
+                }
+            } 
+            else
+            {
+                // созданме транзакции
+                RequestClient.CreateTransaction(user.Id, route.Price, now, "Наличные", "Пополнение баланса наличными через диспетчера", true);
+                RequestClient.CreateTransaction(user.Id, -route.Price, now, "Наличные", "Оплата билета", true);
+            }
+
+            // создание билета
+            RequestClient.CreateTicket(now, route.Price, route.Id, (int)Status.Created);
+
+            // добавление билета пользователю
+            RequestClient.AddTicket(user.Id, route.Id, _worker);
+
             MessageBox.Show("Билет успешно продан");
-            Close();
         }
 
         // когда дата изменена, нужно подгрузить рейсы в этот день
         private void datePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             var date = datePicker.SelectedDate.Value;
-            routesBox.ItemsSource = RequestClient.GetObjects<Route>().
+            var _routes = RequestClient.GetObjects<Route>().
                 Where(x => x.DepartureTime.Month == date.Month && x.DepartureTime.Year == date.Year && x.DepartureTime.Day == date.Day);
+            var cities = RequestClient.GetObjects<City>();
+            var routesNames = new List<string>();
+            foreach (var route in _routes)
+            {
+                var arrivalName = cities.Where(x => x.Id == route.ArrivalCityId).First().Name.Trim();
+                var departureName = cities.Where(x => x.Id == route.DepartureCityId).First().Name.Trim();
+
+                routesNames.Add($"Рейс {route.Id} {departureName} - {arrivalName} в {route.DepartureTime:T}");
+            }
+            routesBox.ItemsSource = routesNames;
+        }
+
+        private void passwordBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (passwordBox.Text.Length > 0)
+            {
+                balanceButton.IsEnabled = false;
+            }
+            else
+            {
+                balanceButton.IsEnabled = true;
+            }
+        }
+
+        private void serialBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (passwordBox.Text.Length > 0)
+            {
+                balanceButton.IsEnabled = false;
+            }
+            else
+            {
+                balanceButton.IsEnabled = true;
+            }
+        }
+
+        private void numberBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (passwordBox.Text.Length > 0)
+            {
+                balanceButton.IsEnabled = false;
+            }
+            else
+            {
+                balanceButton.IsEnabled = true;
+            }
         }
     }
 }

@@ -90,7 +90,6 @@ CREATE TABLE [dbo].[Transaction](
 	[IsComplited] [bit] NOT NULL,
 	[PaymentTime] [datetime] NOT NULL,
 	[PaymentType] [nchar](20) NOT NULL,
-	[KassaId] [int] NOT NULL,
 	[Comment] [ntext] NOT NULL,
  CONSTRAINT [PK_Transaction] PRIMARY KEY CLUSTERED 
 (
