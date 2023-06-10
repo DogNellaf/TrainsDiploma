@@ -105,6 +105,26 @@ namespace ui.Helper
             return JsonConvert.DeserializeObject<Route>(result);
         }
 
+        // создать направление
+        public static City CreateCity(string name)
+        {
+            var route = new City(0, name);
+            var json = JsonConvert.SerializeObject(route);
+            var result = SendRequest($"city", "POST", json);
+
+            return JsonConvert.DeserializeObject<City>(result);
+        }
+
+        // обновить направление
+        public static City UpdateCity(int id, string name)
+        {
+            var route = new City(id, name);
+            var json = JsonConvert.SerializeObject(route);
+            var result = SendRequest($"city", "PUT", json);
+
+            return JsonConvert.DeserializeObject<City>(result);
+        }
+
         // удалить пользователя
         public static void Delete<T>(int id) where T: Model
         {

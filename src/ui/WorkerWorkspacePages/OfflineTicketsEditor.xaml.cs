@@ -22,6 +22,7 @@ namespace ui.AdminWorkspacePages
             _admin = admin;
 
             var routes = RequestClient.GetObjects<Route>();
+            routesBox.ItemsSource = routes;
         }
 
         private void sellButton_Click(object sender, RoutedEventArgs e)

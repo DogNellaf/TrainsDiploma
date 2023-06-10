@@ -38,5 +38,11 @@ namespace ui.AdminWorkspacePages
             Hide();
             new RouteEditor(this, _user).Show();
         }
+
+        private void citiesButton_Click(object sender, RoutedEventArgs e)
+        {
+            Hide();
+            new CityEditor(this, _user).Show();
+        }
     }
 }
