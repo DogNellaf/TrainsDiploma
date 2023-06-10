@@ -19,7 +19,7 @@ namespace TrainsClasses
         [DataMember]
         public string PassportNumber { get; set; }
 
-        public User(): base(0)
+        public User(): base(-1)
         {
 
         }

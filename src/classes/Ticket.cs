@@ -15,7 +15,7 @@ namespace TrainsClasses
         [DataMember]
         public int StatusId { get; set; }
 
-        public Ticket() : base(0)
+        public Ticket() : base(-1)
         {
 
         }

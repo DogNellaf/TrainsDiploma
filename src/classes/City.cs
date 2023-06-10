@@ -8,7 +8,7 @@ namespace TrainsClasses
         [DataMember]
         public string Name { get; set; }
 
-        public City() : base(0)
+        public City() : base(-1)
         {
 
         }

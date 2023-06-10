@@ -8,7 +8,7 @@ namespace TrainsClasses
         [DataMember]
         public string Name { get; set; }
 
-        public PaymentType() : base(0)
+        public PaymentType() : base(-1)
         {
 
         }

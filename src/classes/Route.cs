@@ -16,7 +16,7 @@ namespace TrainsClasses
         [DataMember]
         public float Price { get; set; }
 
-        public Route(): base(0)
+        public Route(): base(-1)
         {
 
         }

@@ -12,7 +12,7 @@ namespace TrainsClasses
         [DataMember]
         public bool IsAdmin { get; set; }
 
-        public Role() : base(0)
+        public Role() : base(-1)
         {
 
         }

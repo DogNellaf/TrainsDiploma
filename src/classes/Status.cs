@@ -8,7 +8,7 @@ namespace TrainsClasses
         [DataMember]
         public string Name { get; set; }
 
-        public Status() : base(0)
+        public Status() : base(-1)
         {
 
         }

@@ -18,7 +18,7 @@ namespace TrainsClasses
         [DataMember]
         public int KassaId { get; }
 
-        public Transaction() : base(0)
+        public Transaction() : base(-1)
         {
 
         }
