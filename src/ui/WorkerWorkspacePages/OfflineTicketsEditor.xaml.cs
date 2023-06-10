@@ -131,10 +131,10 @@ namespace ui.AdminWorkspacePages
             }
 
             // создание билета
-            RequestClient.CreateTicket(now, route.Price, route.Id, (int)Status.Created);
+            ticket = RequestClient.CreateTicket(now, route.Price, route.Id, (int)Status.Created);
 
             // добавление билета пользователю
-            RequestClient.AddTicket(user.Id, route.Id, _worker);
+            RequestClient.AddTicket(user.Id, ticket.Id, _worker);
 
             MessageBox.Show("Билет успешно продан");
         }
