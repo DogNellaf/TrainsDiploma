@@ -14,9 +14,11 @@ namespace TrainsClasses
         [DataMember]
         public DateTime PaymentTime { get; }
         [DataMember]
-        public int PaymentTypeId { get; }
+        public string PaymentType { get; }
         [DataMember]
         public int KassaId { get; }
+        [DataMember]
+        public string Comment { get; }
 
         public Transaction() : base(-1)
         {
@@ -29,19 +31,21 @@ namespace TrainsClasses
             Value = float.Parse(items[2].ToString());
             IsComplited = (bool)items[3];
             PaymentTime = DateTime.Parse(items[4].ToString());
-            PaymentTypeId = (int)items[5];
+            PaymentType = (string)items[5];
             KassaId = (int)items[6];
+            Comment = (string)items[7];
         }
 
 
-        public Transaction(int id, int userId, float value, bool isComplited, DateTime paymentTime, int paymentTypeId, int kassaId) : base(id)
+        public Transaction(int id, int userId, float value, bool isComplited, DateTime paymentTime, string paymentType, int kassaId, string comment) : base(id)
         {
             UserId = userId;
             Value = value;
             IsComplited = isComplited;
             PaymentTime = paymentTime;
-            PaymentTypeId = paymentTypeId;
+            PaymentType = paymentType;
             KassaId = kassaId;
+            Comment = comment;
         }
     }
 }
