@@ -167,6 +167,19 @@ namespace ui.Helper
             SendRequest($"ticket/user?userId={userId}&ticketId={ticketId}&token={worker.Token}", "POST");
         }
 
+        // вернуть билет
+        public static void ReturnTicket(int ticketId, User client)
+        {
+            SendRequest($"ticket/user?ticketId={ticketId}&token={client.Token}", "PUT");
+        }
+
+        // получить билеты пользователю
+        public static List<Ticket> GetUserTickets(int userId, User worker)
+        {
+            var raw = SendRequest($"ticket/user?userId={userId}&token={worker.Token}", "GET");
+            return JsonConvert.DeserializeObject<List<Ticket>>(raw); 
+        }
+
 
         // отправить запрос - общая функция
         private static string SendRequest(string url, string method, string body = "")

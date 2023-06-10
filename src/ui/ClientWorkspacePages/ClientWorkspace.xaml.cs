@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using TrainsClasses;
+using ui.AdminWorkspacePages;
 using ui.Helper;
 
 namespace ui
@@ -23,6 +24,12 @@ namespace ui
         {
             _previous.Show();
             Close();
+        }
+
+        private void yourTicketsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Hide();
+            new TicketsByUser(this, _client).Show();
         }
     }
 }

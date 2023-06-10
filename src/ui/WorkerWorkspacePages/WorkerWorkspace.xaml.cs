@@ -34,9 +34,10 @@ namespace ui
             new OfflineTicketsEditor(this, _user).Show();
         }
 
-        private void ticketsButton_Copy_Click(object sender, RoutedEventArgs e)
+        private void ticketsButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Hide();
+            new TicketsByUser(this, _user).Show();
         }
 
         private void routesButton_Click(object sender, RoutedEventArgs e)
