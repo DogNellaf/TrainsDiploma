@@ -44,5 +44,16 @@ namespace ui.AdminWorkspacePages
             Hide();
             new CityEditor(this, _user).Show();
         }
+
+        private void ticketsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Hide();
+            new TicketsByUser(this, _user).Show();
+        }
+
+        private void reportsButton_Click(object sender, RoutedEventArgs e)
+        {
+            new Reports(this, _user).Show();
+        }
     }
 }

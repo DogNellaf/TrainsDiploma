@@ -1,0 +1,18 @@
+﻿<Window x:Class="ui.AdminWorkspacePages.Reports"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Отчеты" Height="371" Width="405" ResizeMode="NoResize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label x:Name="nameLabel" Content="Отчеты" Margin="10,10,26,0" VerticalAlignment="Top" Height="70" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="24"/>
+        <Button x:Name="ticketsButton" Content="Количество и выручка от продажи билетов за тот месяц" HorizontalAlignment="Left" VerticalAlignment="Top" Height="43" Width="369" IsCancel="True" Margin="10,85,0,0" Click="ticketsButton_Click" FontSize="14" HorizontalContentAlignment="Center"/>
+        <Button x:Name="userButton" Content="Транзакции по пользователю" HorizontalAlignment="Left" VerticalAlignment="Top" Height="43" Width="369" IsCancel="True" Margin="10,133,0,0" Click="userButton_Click" FontSize="14" HorizontalContentAlignment="Center"/>
+        <Button x:Name="routeButton" Content="Пассажиры по рейсу" HorizontalAlignment="Left" VerticalAlignment="Top" Height="43" Width="369" IsCancel="True" Margin="10,181,0,0" FontSize="14" HorizontalContentAlignment="Center" Click="routeButton_Click"/>
+
+    </Grid>
+</Window>

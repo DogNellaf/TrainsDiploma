@@ -32,6 +32,13 @@ namespace ui
             var client = RequestClient.Auth(username, password);
             if (client is not null)
             {
+                var role = RequestClient.GetRole(client.RoleId);
+                if (role.IsWorker || role.IsAdmin)
+                {
+                    MessageBox.Show("Пользователь является сотрудником, используйте другую страницу для авторизации");
+                    return;
+                }
+
                 new ClientWorkspace(client, this).Show();
 
             }
