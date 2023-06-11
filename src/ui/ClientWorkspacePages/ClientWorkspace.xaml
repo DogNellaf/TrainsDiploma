@@ -16,6 +16,7 @@
         <Button x:Name="buyTicketsButton" Content="Купить билет" HorizontalAlignment="Center" Margin="0,130,0,0" VerticalAlignment="Top" Height="40" Width="372" FontSize="24" Click="buyTicketsButton_Click"/>
         <Button x:Name="dataButton" Content="Персональные данные" HorizontalAlignment="Center" Margin="0,175,0,0" VerticalAlignment="Top" Height="40" Width="372" FontSize="24" Click="dataButton_Click"/>
         <Button x:Name="balanceButton" Content="Пополнить баланс" HorizontalAlignment="Center" Margin="0,220,0,0" VerticalAlignment="Top" Height="40" Width="372" FontSize="24" Click="balanceButton_Click"/>
+        <Button x:Name="calendarButton" Content="Расписание на дату" HorizontalAlignment="Center" Margin="0,265,0,0" VerticalAlignment="Top" Height="40" Width="372" FontSize="24" Click="calendarButton_Click"/>
 
     </Grid>
 </Window>

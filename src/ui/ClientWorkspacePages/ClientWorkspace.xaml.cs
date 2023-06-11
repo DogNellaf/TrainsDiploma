@@ -46,5 +46,10 @@ namespace ui
         {
             new BalanceEditor(_client).Show();
         }
+
+        private void calendarButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
