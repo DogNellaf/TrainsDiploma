@@ -48,7 +48,8 @@ namespace ui
 
         private void calendarButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Hide();
+            new WorkerRouteEditor(this, _user).Show();
         }
     }
 }
