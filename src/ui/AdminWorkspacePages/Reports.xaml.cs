@@ -89,8 +89,8 @@ namespace ui.AdminWorkspacePages
                 sum += ticket.Price;
 
                 var route = routes.Where(x => x.Id == ticket.RouteId).First();
-                var cityTo = cities.Find(x => x.Id == route.ArrivalCityId);
-                var cityFrom = cities.Find(x => x.Id == route.DepartureCityId);
+                var cityTo = cities.Find(x => x.Id == route.ArrivalCityId).Name.Trim();
+                var cityFrom = cities.Find(x => x.Id == route.DepartureCityId).Name.Trim();
 
                 t.Rows[i + 1].Cells[0].Paragraphs.First().Append($"{ticket.BuyTime}");
                 t.Rows[i + 1].Cells[1].Paragraphs.First().Append($"{ticket.Price}");
@@ -130,7 +130,7 @@ namespace ui.AdminWorkspacePages
             Table t = doc.AddTable(transactions.Count + 1, 5);
             t.Alignment = Alignment.center;
 
-            t.Rows[0].Cells[0].Paragraphs.First().Append("Количество");
+            t.Rows[0].Cells[0].Paragraphs.First().Append("Изменение");
             t.Rows[0].Cells[1].Paragraphs.First().Append("Завершена ли");
             t.Rows[0].Cells[2].Paragraphs.First().Append("Время");
             t.Rows[0].Cells[3].Paragraphs.First().Append("Тип оплаты");
