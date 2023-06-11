@@ -14,23 +14,11 @@ namespace API.Controllers
             _transactionService = transactionService;
         }
 
-        //[HttpGet("{id:int}")]
-        //public IActionResult Details(int id)
-        //{
-        //    if (id < 0)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    var city = _cityService.Get(id);
-
-        //    if (city is null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(city);
-        //}
+        [HttpGet]
+        public List<Transaction> Tickets()
+        {
+            return _transactionService.Objects;
+        }
 
         [HttpPost("")]
         public ActionResult Create([FromBody] Transaction data, string token)

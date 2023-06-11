@@ -16,7 +16,6 @@ namespace API.Controllers
             _ticketService = ticketService;
         }
 
-        // GET: UserController
         [HttpGet]
         public List<Ticket> Tickets()
         {
