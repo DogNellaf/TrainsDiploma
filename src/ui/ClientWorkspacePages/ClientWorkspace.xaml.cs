@@ -31,5 +31,20 @@ namespace ui
             Hide();
             new TicketsByUser(this, _client).Show();
         }
+
+        private void buyTicketsButton_Click(object sender, RoutedEventArgs e)
+        {
+            new TicketsEditor(_client).Show();
+        }
+
+        private void dataButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void balanceButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
