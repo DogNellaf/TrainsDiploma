@@ -13,9 +13,9 @@ namespace ui.AdminWorkspacePages
         {
             InitializeComponent();
             _user = user;
-            loginBox.Text = user.Login;
-            serialBox.Text = user.PassportSeries;
-            numberBox.Text = user.PassportNumber;
+            loginBox.Text = user.Login.Trim();
+            serialBox.Text = user.PassportSeries.Trim();
+            numberBox.Text = user.PassportNumber.Trim();
         }
 
         private void passwordButton_Click(object sender, RoutedEventArgs e)
@@ -37,48 +37,48 @@ namespace ui.AdminWorkspacePages
                 return;
             }
 
-            var user = RequestClient.GetObjects<User>().Where(x => x.Login == login && x.Id != _user.Id).FirstOrDefault();
+            var user = RequestClient.GetObjects<User>().Where(x => x.Login.Trim() == login && x.Id != _user.Id).FirstOrDefault();
 
             if (user is not null)
             {
                 MessageBox.Show("Пользователь с таким логином уже существует");
-                Close();
+                return;
             }
 
             if (string.IsNullOrEmpty(series))
             {
                 MessageBox.Show("У вас не заполнена серия паспорта");
-                Close();
+                return;
             }
 
             if (series.Length != 4)
             {
                 MessageBox.Show("У вас некорректный формат серии паспорта (нет 4 знаков)");
-                Close();
+                return;
             }
 
             if (!int.TryParse(series, out int result))
             {
                 MessageBox.Show("У вас некорректный формат серии паспорта (не только цифры)");
-                Close();
+                return;
             }
 
             if (string.IsNullOrEmpty(number))
             {
                 MessageBox.Show("У вас не заполнен номер паспорта");
-                Close();
+                return;
             }
 
             if (number.Length != 6)
             {
                 MessageBox.Show("У вас некорректный формат номера паспорта (нет 6 знаков)");
-                Close();
+                return;
             }
 
             if (!int.TryParse(number, out int result2))
             {
                 MessageBox.Show("У вас некорректный формат номера паспорта (не только цифры)");
-                Close();
+                return;
             }
 
             _user.Login = login;

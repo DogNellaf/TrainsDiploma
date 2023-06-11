@@ -24,12 +24,12 @@ namespace ui
         {
             var login = usernameTextBox.Text;
 
-            var user = RequestClient.GetObjects<User>().Where(x => x.Login == login).FirstOrDefault();
+            var user = RequestClient.GetObjects<User>().Where(x => x.Login.Trim() == login).FirstOrDefault();
 
             if (user is not null)
             {
                 MessageBox.Show("Пользователь с таким логином уже существует");
-                Close();
+                return;
             }
 
             var password = passwordTextBox.Text;

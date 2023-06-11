@@ -16,44 +16,10 @@ namespace ui.AdminWorkspacePages
         {
             InitializeComponent();
             _user = user;
+            _user.PassportSeries = _user.PassportSeries.Trim();
+            _user.PassportNumber = _user.PassportNumber.Trim();
             datePicker.SelectedDate = DateTime.Now;
             ShowBalance();
-
-            if (string.IsNullOrEmpty(_user.PassportSeries))
-            {
-                MessageBox.Show("У вас не заполнена серия паспорта");
-                Close();
-            }
-
-            if (_user.PassportSeries.Length != 4)
-            {
-                MessageBox.Show("У вас некорректный формат серии паспорта (нет 4 знаков)");
-                Close();
-            }
-
-            if (!int.TryParse(_user.PassportSeries, out int result))
-            {
-                MessageBox.Show("У вас некорректный формат серии паспорта (не только цифры)");
-                Close();
-            }
-
-            if (string.IsNullOrEmpty(_user.PassportNumber))
-            {
-                MessageBox.Show("У вас не заполнен номер паспорта");
-                Close();
-            }
-
-            if (_user.PassportNumber.Length != 6)
-            {
-                MessageBox.Show("У вас некорректный формат номера паспорта (нет 6 знаков)");
-                Close();
-            }
-
-            if (!int.TryParse(_user.PassportNumber, out int result2))
-            {
-                MessageBox.Show("У вас некорректный формат номера паспорта (не только цифры)");
-                Close();
-            }
         }
 
         private void ShowBalance()
@@ -114,6 +80,45 @@ namespace ui.AdminWorkspacePages
                 routesNames.Add($"Рейс {route.Id} {departureName} - {arrivalName} в {route.DepartureTime:T}");
             }
             routesBox.ItemsSource = routesNames;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(_user.PassportSeries))
+            {
+                MessageBox.Show("У вас не заполнена серия паспорта");
+                Close();
+            }
+
+            if (_user.PassportSeries.Length != 4)
+            {
+                MessageBox.Show("У вас некорректный формат серии паспорта (нет 4 знаков)");
+                Close();
+            }
+
+            if (!int.TryParse(_user.PassportSeries, out int result))
+            {
+                MessageBox.Show("У вас некорректный формат серии паспорта (не только цифры)");
+                Close();
+            }
+
+            if (string.IsNullOrEmpty(_user.PassportNumber))
+            {
+                MessageBox.Show("У вас не заполнен номер паспорта");
+                Close();
+            }
+
+            if (_user.PassportNumber.Length != 6)
+            {
+                MessageBox.Show("У вас некорректный формат номера паспорта (нет 6 знаков)");
+                Close();
+            }
+
+            if (!int.TryParse(_user.PassportNumber, out int result2))
+            {
+                MessageBox.Show("У вас некорректный формат номера паспорта (не только цифры)");
+                Close();
+            }
         }
     }
 }

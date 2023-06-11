@@ -39,17 +39,12 @@ namespace ui
 
         private void dataButton_Click(object sender, RoutedEventArgs e)
         {
-
+            new DataEditor(_client).Show();
         }
 
         private void balanceButton_Click(object sender, RoutedEventArgs e)
         {
             new BalanceEditor(_client).Show();
-        }
-
-        private void calendarButton_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
