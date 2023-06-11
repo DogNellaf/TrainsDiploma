@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
+using TrainsClasses;
 using ui.Helper;
 
 namespace ui
@@ -20,9 +22,18 @@ namespace ui
 
         private void authButton_Click(object sender, RoutedEventArgs e)
         {
-            var username = usernameTextBox.Text;
+            var login = usernameTextBox.Text;
+
+            var user = RequestClient.GetObjects<User>().Where(x => x.Login == login).FirstOrDefault();
+
+            if (user is not null)
+            {
+                MessageBox.Show("Пользователь с таким логином уже существует");
+                Close();
+            }
+
             var password = passwordTextBox.Text;
-            var client = RequestClient.Register(username, password);
+            var client = RequestClient.Register(login, password);
             if (client is not null)
             {
                 MessageBox.Show("Вы успешно зарегистрированы");
