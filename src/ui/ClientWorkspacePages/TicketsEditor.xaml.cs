@@ -64,6 +64,19 @@ namespace ui.AdminWorkspacePages
                 return;
             }
 
+            if (route.DepartureTime <= DateTime.Now)
+            {
+                MessageBox.Show("Рейс уже ушел, нельзя купить билет");
+                return;
+            }
+
+            var tickets = RequestClient.GetRouteTickets(route.Id);
+            if (tickets.Count > 1200)
+            {
+                MessageBox.Show("В поезде нет мест");
+                return;
+            }
+
             // создание билета
             var ticket = new Ticket(-1, now, route.Price, route.Id, (int)Status.Created, _user.Id);
 
