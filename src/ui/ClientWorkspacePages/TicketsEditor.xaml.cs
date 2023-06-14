@@ -15,6 +15,7 @@ namespace ui.AdminWorkspacePages
     public partial class TicketsEditor : Window
     {
         private User _user;
+        private readonly ReportCreator _reportCreator;
         public TicketsEditor(User user)
         {
             InitializeComponent();
@@ -22,6 +23,7 @@ namespace ui.AdminWorkspacePages
             _user.PassportSeries = _user.PassportSeries.Trim();
             _user.PassportNumber = _user.PassportNumber.Trim();
             datePicker.SelectedDate = DateTime.Now;
+            _reportCreator = new ReportCreator();
             ShowBalance();
         }
 
@@ -82,60 +84,22 @@ namespace ui.AdminWorkspacePages
             // создание билета
             ticket = RequestClient.CreateTicket(now, route.Price, route.Id, (int)Status.Created, _user.Id);
 
+            // создание файла билета
+            GenerateDocxTicket(ticket);
+
             MessageBox.Show("Билет успешно куплен");
         }
 
         // генерация билета
-        private void GenerateDocxTicket()
+        private void GenerateDocxTicket(Ticket ticket)
         {
-            //var path = $"ticket_{DateTime.Now.ToFileTimeUtc}";
+            var path = $"ticket_{DateTime.Now.ToFileTimeUtc()}";
 
-            //if (File.Exists(path))
-            //{
-            //    File.Delete(path);
-            //}
+            _reportCreator.Path = path;
 
-            //var doc = DocX.Create(path);
+            _reportCreator.GenerateTicketFile(ticket);
 
-            //var paragraph = doc.InsertParagraph(ticketsButton.Content.ToString(), false, titleFormat);
-            //paragraph.LineSpacing = 15;
-
-            //var tickets = RequestClient.GetObjects<Ticket>().Where(x => x.BuyTime.Month == DateTime.Now.Month && x.StatusId != 2).ToList();
-            //var routes = RequestClient.GetObjects<Route>();
-            //var cities = RequestClient.GetObjects<City>();
-
-            //Table t = doc.AddTable(tickets.Count + 1, 3);
-            //t.Alignment = Alignment.center;
-
-            //t.Rows[0].Cells[0].Paragraphs.First().Append("Время оформления");
-            //t.Rows[0].Cells[1].Paragraphs.First().Append("Цена");
-            //t.Rows[0].Cells[2].Paragraphs.First().Append("Направление");
-
-            //float sum = 0;
-
-            //for (int i = 0; i < tickets.Count; i++)
-            //{
-            //    var ticket = tickets[i];
-            //    sum += ticket.Price;
-
-            //    var route = routes.Where(x => x.Id == ticket.RouteId).First();
-            //    var cityTo = cities.Find(x => x.Id == route.ArrivalCityId).Name.Trim();
-            //    var cityFrom = cities.Find(x => x.Id == route.DepartureCityId).Name.Trim();
-
-            //    t.Rows[i + 1].Cells[0].Paragraphs.First().Append($"{ticket.BuyTime}");
-            //    t.Rows[i + 1].Cells[1].Paragraphs.First().Append($"{ticket.Price}");
-            //    t.Rows[i + 1].Cells[2].Paragraphs.First().Append($"Рейс {route.Id} {cityFrom} - {cityTo}");
-            //}
-
-            //doc.InsertTable(t);
-
-            //doc.InsertParagraph($"Всего куплено билетов: {tickets.Count}", false, textFormat);
-
-            //doc.InsertParagraph($"Куплено билетов на сумму: {sum}", false, textFormat);
-
-            //doc.Save();
-
-            //MessageBox.Show($"Отчет сохранен в файл {path}");
+            MessageBox.Show($"Отчет сохранен в файл {path}");
         }
 
 

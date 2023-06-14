@@ -10,7 +10,7 @@
         <Button x:Name="exitButton" Content="Назад" HorizontalAlignment="Right" VerticalAlignment="Top" Height="40" Width="77" FontSize="20" IsCancel="True" Click="exitButton_Click" Margin="0,10,10,0"/>
         <Label x:Name="nameLabel" Content="Просмотр билетов" Margin="92,10,92,0" VerticalAlignment="Top" Height="70" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="24"/>
         <Border BorderBrush="Black" BorderThickness="1" Margin="92,80,92,80">
-            <DataGrid x:Name="ticketsGrid" ColumnWidth="*"/>
+            <DataGrid x:Name="ticketsGrid" ColumnWidth="*" Loaded="ticketsGrid_Loaded"/>
         </Border>
         <Button x:Name="returnButton" Content="Вернуть билет" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="26" Width="150" IsCancel="True" Margin="310,0,0,10" Click="returnButton_Click"/>
         <Label x:Name="idLabel" Content="Id билета" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom"/>

@@ -108,5 +108,15 @@ namespace ui.AdminWorkspacePages
             ticketsGrid.IsReadOnly = true;
             MessageBox.Show("Выбраны все билеты");
         }
+
+        private void ticketsGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            ticketsGrid.Columns[0].Header = "Время покупки";
+            ticketsGrid.Columns[1].Header = "Цена";
+            ticketsGrid.Columns[2].Header = "Id направления";
+            ticketsGrid.Columns[3].Header = "Id статуса";
+            ticketsGrid.Columns[4].Header = "Id пользователя";
+            ticketsGrid.Columns[5].Header = "Идентификатор";
+        }
     }
 }

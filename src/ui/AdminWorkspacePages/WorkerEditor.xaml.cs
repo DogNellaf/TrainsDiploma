@@ -93,6 +93,14 @@ namespace ui.AdminWorkspacePages
         {
             workersGrid.Columns[workersGrid.Columns.Count - 1].IsReadOnly = true;
             workersGrid.Columns[1].IsReadOnly = true;
+
+            workersGrid.Columns[0].Header = "Имя пользователя";
+            workersGrid.Columns[1].Header = "Ключ доступа";
+            workersGrid.Columns[2].Header = "Текущий баланс";
+            workersGrid.Columns[3].Header = "Номер роли";
+            workersGrid.Columns[4].Header = "Серия паспорта";
+            workersGrid.Columns[5].Header = "Номер паспорта";
+            workersGrid.Columns[6].Header = "Идентификатор";
         }
 
         private void changePasswordButton_Click(object sender, RoutedEventArgs e)

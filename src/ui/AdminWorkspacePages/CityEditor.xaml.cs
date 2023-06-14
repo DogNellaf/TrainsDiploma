@@ -21,13 +21,7 @@ namespace ui.AdminWorkspacePages
             _previous = previous;
             _admin = admin;
 
-            var cities = RequestClient.GetObjects<City>();
-            //if (routes.Count == 0)
-            //{
-            //    routes.Add(new Route(0, DateTime.Now, "", 0, ""));
-            //}
-
-            routesGrid.ItemsSource = cities;
+            citiesGrid.ItemsSource = RequestClient.GetObjects<City>();
         }
 
         private void exitButton_Click(object sender, RoutedEventArgs e)
@@ -82,8 +76,8 @@ namespace ui.AdminWorkspacePages
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //routesGrid.Columns[routesGrid.Columns.Count - 1].IsReadOnly = true;
-            //routesGrid.Columns[1].IsReadOnly = true;
+            citiesGrid.Columns[0].Header = "Название города";
+            citiesGrid.Columns[1].Header = "Идентификатор";
         }
 
         private void removeButton_Click(object sender, RoutedEventArgs e)

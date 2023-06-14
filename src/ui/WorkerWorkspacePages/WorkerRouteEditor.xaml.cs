@@ -65,5 +65,15 @@ namespace ui.AdminWorkspacePages
             routesGrid.Columns[4].IsReadOnly = true;
             routesGrid.Columns[5].IsReadOnly = true;
         }
+
+        private void routesGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            routesGrid.Columns[0].Header = "Время отправления";
+            routesGrid.Columns[1].Header = "Id города отправления";
+            routesGrid.Columns[2].Header = "Длительность (в минутах)";
+            routesGrid.Columns[3].Header = "Город прибытия";
+            routesGrid.Columns[4].Header = "Цена билета";
+            routesGrid.Columns[5].Header = "Идентификатор";
+        }
     }
 }

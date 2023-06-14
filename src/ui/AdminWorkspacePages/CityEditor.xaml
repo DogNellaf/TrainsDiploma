@@ -1,4 +1,4 @@
-﻿<Window x:Class="ui.AdminWorkspacePages.CityEditor"
+﻿<Window x:Name="page" x:Class="ui.AdminWorkspacePages.CityEditor"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,7 +9,7 @@
         <Button x:Name="exitButton" Content="Назад" HorizontalAlignment="Right" VerticalAlignment="Top" Height="40" Width="77" FontSize="20" IsCancel="True" Click="exitButton_Click" Margin="0,10,10,0"/>
         <Label x:Name="nameLabel" Content="Редактор городов" Margin="92,10,92,0" VerticalAlignment="Top" Height="70" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="24"/>
         <Border BorderBrush="Black" BorderThickness="1" Margin="92,80,92,80">
-            <DataGrid x:Name="routesGrid" RowEditEnding="routesGrid_RowEditEnding" ColumnWidth="*">
+            <DataGrid x:Name="citiesGrid" RowEditEnding="routesGrid_RowEditEnding" ColumnWidth="*">
                 <DataGrid.RowStyle>
                     <Style/>
                 </DataGrid.RowStyle>

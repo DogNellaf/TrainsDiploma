@@ -10,7 +10,7 @@ namespace ui.Helper
 {
     internal class ReportCreator
     {
-        public readonly string Path = "report.docx";
+        public string Path = "report.docx";
         private Formatting titleFormat;
         private Formatting textFormat;
         public ReportCreator() 
@@ -74,6 +74,41 @@ namespace ui.Helper
             doc.InsertParagraph($"Всего куплено билетов: {tickets.Count}", false, textFormat);
 
             doc.InsertParagraph($"Куплено билетов на сумму: {sum}", false, textFormat);
+
+            doc.Save();
+        }
+
+        internal void GenerateTicketFile(Ticket ticket)
+        {
+            var doc = CreateReport();
+
+            doc.InsertParagraph($"Номер билета {ticket.Id}", false, titleFormat);
+            doc.InsertParagraph($"Куплен {ticket.BuyTime}", false, textFormat);
+            doc.InsertParagraph();
+
+            var user = RequestClient.GetObject<User>(ticket.UserId);
+
+            doc.InsertParagraph($"Купил {user.Login.Trim()}, паспорт {user.PassportSeries} {user.PassportNumber}", false, textFormat);
+
+            doc.InsertParagraph();
+
+            var route = RequestClient.GetObjects<Route>().Find(x => x.Id == ticket.RouteId);
+            var cities = RequestClient.GetObjects<City>();
+            var arrivalCity = cities.Find(x => x.Id == route.ArrivalCityId);
+            var departureCity = cities.Find(x => x.Id == route.DepartureCityId);
+
+            Table t = doc.AddTable(2, 3);
+            t.Alignment = Alignment.center;
+
+            t.Rows[0].Cells[0].Paragraphs.First().Append("Дата и время отправления");
+            t.Rows[0].Cells[1].Paragraphs.First().Append("Дата и время прибытия");
+            t.Rows[0].Cells[2].Paragraphs.First().Append("Направление (рейс)");
+
+            t.Rows[1].Cells[0].Paragraphs.First().Append($"{route.DepartureTime}");
+            t.Rows[1].Cells[1].Paragraphs.First().Append($"{route.DepartureTime.AddMinutes(route.Duration)}");
+            t.Rows[1].Cells[2].Paragraphs.First().Append($"{departureCity.Name.Trim()} -> {arrivalCity.Name.Trim()}");
+
+            doc.InsertTable(t);
 
             doc.Save();
         }
