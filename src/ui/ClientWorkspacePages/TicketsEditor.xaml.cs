@@ -31,7 +31,15 @@ namespace ui.AdminWorkspacePages
         {
             var date = datePicker.DisplayDate;
             var now = DateTime.Now;
-            var routeId = int.Parse(routesBox.SelectedItem.ToString().Split(' ')[1]);
+            int routeId = -1;
+            try
+            {
+                routeId = int.Parse(routesBox.SelectedItem.ToString().Split(' ')[1]);
+            }
+            catch
+            {
+                MessageBox.Show("Не выбран рейс");
+            }
 
             var route = RequestClient.GetObjects<Route>().Where(x => x.Id == routeId).FirstOrDefault();
 
