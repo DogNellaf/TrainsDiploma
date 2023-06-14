@@ -167,19 +167,29 @@ namespace RestaurantsClasses
             return false;
         }
 
-        // проверить, является ли пользователь админом, по id
         public static List<Ticket> GetUserTickets(int id)
         {
             DataTable table = ExecuteQuery($"SELECT * FROM Ticket WHERE UserId = {id}");
             var result = new List<Ticket>();
 
+            foreach (DataRow row in table.Rows)
+            {
+                result.Add(new Ticket(row.ItemArray));
+            }
+
+            return result;
+        }
+
+        // проверить, является ли пользователь админом, по id
+        public static List<User> GetUsersByRoute(int id)
+        {
+            DataTable table = ExecuteQuery($"SELECT u.*\r\nFROM dbo.\"Ticket\" as t\r\nJOIN dbo.\"Route\" as r on t.routeId = r.Id\r\nJOIN dbo.\"User\" as u on u.Id = t.UserId\r\nWHERE r.Id = {id}");
+            var result = new List<User>();
+
             // проходимся по каждой строчке таблицы-результата
             foreach (DataRow row in table.Rows)
             {
-                // в конструктор передаем единственный параметр - все столбцы строки
-                //var parameters = new object[1];
-                //parameters[0] = row.ItemArray;
-                result.Add(new Ticket(row.ItemArray));
+                result.Add(new User(row.ItemArray));
             }
 
             return result;

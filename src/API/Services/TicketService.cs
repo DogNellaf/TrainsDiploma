@@ -38,6 +38,11 @@ namespace API.Services
             Database.ReturnTicket(id);
         }
 
+        public List<User> GetUsersByRoute(int id)
+        {
+            return Database.GetUsersByRoute(id);
+        }
+
         public override string GetUpdateValues(Ticket ticket)
         {
             return $"BuyTime = '{ticket.BuyTime:yyyy-dd-MM HH:mm:ss.fff}', " +

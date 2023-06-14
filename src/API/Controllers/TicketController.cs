@@ -75,5 +75,12 @@ namespace API.Controllers
             _ticketService.ReturnTicket(ticketId);
             return Ok();
         }
+
+        [HttpGet("/ticket/route")]
+        public ActionResult GetUserTickets(int routeId)
+        {
+            var result = _ticketService.GetUsersByRoute(routeId);
+            return Ok(result);
+        }
     }
 }
