@@ -192,5 +192,37 @@ namespace ui.AdminWorkspacePages
                 balanceButton.IsEnabled = true;
             }
         }
+
+        private void findUser_Click(object sender, RoutedEventArgs e)
+        {
+            var login = loginBox.Text;
+
+            if (string.IsNullOrEmpty(login))
+            {
+                MessageBox.Show("Не был введен логин");
+                return;
+            }
+
+            var user = RequestClient.GetObjects<User>().Find(x => x.Login.Trim() == login);
+
+            if (user is null)
+            {
+                passwordBox.IsEnabled = true;
+                numberBox.Text = "";
+                numberBox.IsEnabled = true;
+                serialBox.Text = "";
+                serialBox.IsEnabled = true;
+                MessageBox.Show("Пользователь не найден");
+                return;
+            }
+
+            loginBox.IsReadOnly = true;
+            passwordBox.IsEnabled = false;
+            numberBox.Text = user.PassportNumber;
+            numberBox.IsEnabled = false;
+            serialBox.Text = user.PassportSeries;
+            serialBox.IsEnabled = false;
+            MessageBox.Show("Пользователь найден");
+        }
     }
 }

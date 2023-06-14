@@ -11,7 +11,7 @@
         </Grid.ColumnDefinitions>
         <Label x:Name="nameLabel" Content="Продажа билетов" Margin="10,10,10,0" VerticalAlignment="Top" Height="70" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="24"/>
         <Button x:Name="sellButton" Content="Продать" HorizontalAlignment="Left" VerticalAlignment="Top" Height="43" Width="369" IsCancel="True" Margin="10,286,0,0" Click="sellButton_Click" FontSize="20" HorizontalContentAlignment="Center"/>
-        <TextBox x:Name="loginBox" HorizontalAlignment="Left" Margin="94,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="287" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        <TextBox x:Name="loginBox" HorizontalAlignment="Left" Margin="94,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="232" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
         <Label Content="Логин" HorizontalAlignment="Left" Margin="5,80,0,0" VerticalAlignment="Top" Width="84"/>
         <Label Content="Пароль" HorizontalAlignment="Left" Margin="5,111,0,0" VerticalAlignment="Top" Width="84"/>
         <TextBox x:Name="passwordBox" HorizontalAlignment="Left" Margin="94,111,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="286" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TextChanged="passwordBox_TextChanged"/>
@@ -25,6 +25,7 @@
         <TextBox x:Name="numberBox" HorizontalAlignment="Left" Margin="94,173,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="286" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TextChanged="numberBox_TextChanged" MaxLength="6"/>
         <RadioButton x:Name="cashButton" Content="Оплата наличными" HorizontalAlignment="Left" Margin="10,266,0,0" VerticalAlignment="Top" IsChecked="True"/>
         <RadioButton x:Name="balanceButton" Content="Оплата со счета" HorizontalAlignment="Left" Margin="272,266,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="findUser" Content="Найти" HorizontalAlignment="Left" Margin="331,80,0,0" VerticalAlignment="Top" Height="26" Width="49" Click="findUser_Click"/>
 
     </Grid>
 </Window>
