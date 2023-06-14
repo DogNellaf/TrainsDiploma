@@ -180,6 +180,13 @@ namespace ui.Helper
             return JsonConvert.DeserializeObject<List<Ticket>>(raw); 
         }
 
+        // получить билеты по рейсу
+        public static List<User> GetRouteTickets(int userId)
+        {
+            var raw = SendRequest($"ticket/route?routeId={userId}", "GET");
+            return JsonConvert.DeserializeObject<List<User>>(raw);
+        }
+
 
         // отправить запрос - общая функция
         private static string SendRequest(string url, string method, string body = "")

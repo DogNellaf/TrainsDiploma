@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using TrainsClasses;
 using TrainsClasses.Enums;
 using ui.Helper;
+using Xceed.Document.NET;
+using Xceed.Words.NET;
 
 namespace ui.AdminWorkspacePages
 {
@@ -81,6 +84,60 @@ namespace ui.AdminWorkspacePages
 
             MessageBox.Show("Билет успешно куплен");
         }
+
+        // генерация билета
+        private void GenerateDocxTicket()
+        {
+            //var path = $"ticket_{DateTime.Now.ToFileTimeUtc}";
+
+            //if (File.Exists(path))
+            //{
+            //    File.Delete(path);
+            //}
+
+            //var doc = DocX.Create(path);
+
+            //var paragraph = doc.InsertParagraph(ticketsButton.Content.ToString(), false, titleFormat);
+            //paragraph.LineSpacing = 15;
+
+            //var tickets = RequestClient.GetObjects<Ticket>().Where(x => x.BuyTime.Month == DateTime.Now.Month && x.StatusId != 2).ToList();
+            //var routes = RequestClient.GetObjects<Route>();
+            //var cities = RequestClient.GetObjects<City>();
+
+            //Table t = doc.AddTable(tickets.Count + 1, 3);
+            //t.Alignment = Alignment.center;
+
+            //t.Rows[0].Cells[0].Paragraphs.First().Append("Время оформления");
+            //t.Rows[0].Cells[1].Paragraphs.First().Append("Цена");
+            //t.Rows[0].Cells[2].Paragraphs.First().Append("Направление");
+
+            //float sum = 0;
+
+            //for (int i = 0; i < tickets.Count; i++)
+            //{
+            //    var ticket = tickets[i];
+            //    sum += ticket.Price;
+
+            //    var route = routes.Where(x => x.Id == ticket.RouteId).First();
+            //    var cityTo = cities.Find(x => x.Id == route.ArrivalCityId).Name.Trim();
+            //    var cityFrom = cities.Find(x => x.Id == route.DepartureCityId).Name.Trim();
+
+            //    t.Rows[i + 1].Cells[0].Paragraphs.First().Append($"{ticket.BuyTime}");
+            //    t.Rows[i + 1].Cells[1].Paragraphs.First().Append($"{ticket.Price}");
+            //    t.Rows[i + 1].Cells[2].Paragraphs.First().Append($"Рейс {route.Id} {cityFrom} - {cityTo}");
+            //}
+
+            //doc.InsertTable(t);
+
+            //doc.InsertParagraph($"Всего куплено билетов: {tickets.Count}", false, textFormat);
+
+            //doc.InsertParagraph($"Куплено билетов на сумму: {sum}", false, textFormat);
+
+            //doc.Save();
+
+            //MessageBox.Show($"Отчет сохранен в файл {path}");
+        }
+
 
         // когда дата изменена, нужно подгрузить рейсы в этот день
         private void datePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)

@@ -15,7 +15,7 @@
         <Label Content="Логин" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40" Width="300" FontSize="24" Margin="0,210,0,0"/>
         <Label Content="Пароль" HorizontalAlignment="Center" Margin="0,300,0,0" VerticalAlignment="Top" Height="40" Width="300" FontSize="24"/>
         <TextBox x:Name="passwordTextBox" HorizontalAlignment="Center" Height="40" Margin="0,345,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="300" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="24"/>
-        <Button x:Name="authButton" Content="Авторизироваться" HorizontalAlignment="Center" Margin="0,400,0,0" VerticalAlignment="Top" Height="40" Width="300" FontSize="24" Click="authButton_Click"/>
+        <Button x:Name="authButton" Content="Авторизоваться" HorizontalAlignment="Center" Margin="0,400,0,0" VerticalAlignment="Top" Height="40" Width="300" FontSize="24" Click="authButton_Click"/>
         <Button x:Name="clientButton" Content="Я клиент" HorizontalAlignment="Right" Margin="620,10,0,0" VerticalAlignment="Top" Height="40" Width="170" FontSize="24" Click="clientButton_Click"/>
 
     </Grid>
