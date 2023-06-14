@@ -31,14 +31,24 @@ namespace ui.AdminWorkspacePages
         {
             var date = datePicker.DisplayDate;
             var now = DateTime.Now;
-            int routeId = -1;
-            try
-            {
-                routeId = int.Parse(routesBox.SelectedItem.ToString().Split(' ')[1]);
-            }
-            catch
+
+            if (routesBox.SelectedItem is null)
             {
                 MessageBox.Show("Не выбран рейс");
+                return;
+            }
+
+            var routeData = routesBox.SelectedItem.ToString().Split(' ');
+            if (routeData.Length == 0)
+            {
+                MessageBox.Show("Не выбран рейс");
+                return;
+            }
+
+            if (!int.TryParse(routeData[1], out int routeId))
+            {
+                MessageBox.Show("Некорректные данные рейса");
+                return;
             }
 
             var route = RequestClient.GetObjects<Route>().Where(x => x.Id == routeId).FirstOrDefault();
