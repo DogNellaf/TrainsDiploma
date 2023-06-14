@@ -17,11 +17,13 @@ namespace ui.AdminWorkspacePages
         private Window _previous;
         private User _worker;
         private List<Route> _routes = new List<Route>();
+        private ReportCreator _reportCreator;
         public OfflineTicketsEditor(Window previous, User worker)
         {
             InitializeComponent();
             _previous = previous;
             _worker = worker;
+            _reportCreator = new ReportCreator();
             datePicker.SelectedDate = DateTime.Now;
         }
 
@@ -41,6 +43,19 @@ namespace ui.AdminWorkspacePages
             if (route is null)
             {
                 MessageBox.Show("Не выбран рейс");
+                return;
+            }
+
+            if (route.DepartureTime <= DateTime.Now)
+            {
+                MessageBox.Show("Рейс уже ушел, нельзя купить билет");
+                return;
+            }
+
+            var tickets = RequestClient.GetRouteTickets(route.Id);
+            if (tickets.Count > 1200)
+            {
+                MessageBox.Show("В поезде нет мест");
                 return;
             }
 
@@ -133,10 +148,11 @@ namespace ui.AdminWorkspacePages
             // создание билета
             ticket = RequestClient.CreateTicket(now, route.Price, route.Id, (int)Status.Created, user.Id);
 
-            // добавление билета пользователю
-            //RequestClient.AddTicket(user.Id, ticket.Id, _worker);
+            // генерация билета
+            _reportCreator.GenerateTicketFile(ticket);
+            _reportCreator.Path = $"ticket_{DateTime.Now.ToFileTimeUtc()}.docx";
 
-            MessageBox.Show("Билет успешно продан");
+            MessageBox.Show($"Билет успешно продан, создан новый билет в файле {_reportCreator.Path}");
         }
 
         // когда дата изменена, нужно подгрузить рейсы в этот день
