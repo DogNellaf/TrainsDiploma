@@ -44,6 +44,7 @@ namespace ui
 
         private void balanceButton_Click(object sender, RoutedEventArgs e)
         {
+            // поправить ошибку
             new BalanceEditor(_client).Show();
         }
     }
